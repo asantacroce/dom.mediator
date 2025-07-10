@@ -1,4 +1,7 @@
-﻿# Dom.Mediator
+﻿[![NuGet](https://img.shields.io/nuget/v/Dom.Mediator.svg)](https://www.nuget.org/packages/Dom.Mediator)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
+
+# Dom.Mediator
 
 **Dom.Mediator** is a clean, minimal, zero-dependency implementation of the Mediator pattern for .NET, focused on:
 
