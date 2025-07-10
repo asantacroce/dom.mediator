@@ -7,7 +7,7 @@
 
 - ✅ Request/Response messaging (CQRS)
 - ✅ Composable pipeline behaviors (validation, logging, etc.)
-- ✅ Built-in `Result<T>` handling with typed errors
+- ✅ Built-in Result Pattern handling with typed errors
 - ✅ No external dependencies — just C#
 - ✅ Perfect fit for Minimal APIs or Clean Architecture
 
