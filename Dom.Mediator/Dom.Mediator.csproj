@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="LICENSE" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<PropertyGroup>
+	<TargetFramework>net8.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+
+	<PackageId>Dom.Mediator</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>André Dominic Santacroce</Authors>
+	<Company>André Dominic Santacroce - https://www.andresantacroce.com</Company>
+	<Description>Lightweight mediator pattern with behavior pipeline and Result Pattern support.</Description>
+	<PackageTags>mediator pipeline cqrs result-pattern</PackageTags>
+	<RepositoryUrl>https://github.com/santacroce/dom.mediator</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/santacroce/dom.mediator</PackageProjectUrl>
+	<RepositoryType>git</RepositoryType>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<IncludeSymbols>false</IncludeSymbols>
+	</PropertyGroup>
+</Project>
