@@ -1,6 +1,8 @@
+﻿using System.Security;
+
 MIT License
 
-Copyright (c) 2025 André Dominic Santacroce
+Copyright (c) 2025 Andrè Dominic Santacroce - https://www.andresantacroce.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
