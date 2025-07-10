@@ -3,13 +3,11 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Include="LICENSE" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="" />
-	</ItemGroup>
+    	<None Include="README.md" Pack="true" PackagePath="" />
+    	<None Include="LICENSE" Pack="true" PackagePath="" />
+  	</ItemGroup>
 
 	<PropertyGroup>
 	<TargetFramework>net8.0</TargetFramework>
@@ -22,9 +20,9 @@
 	<Company>André Dominic Santacroce - https://www.andresantacroce.com</Company>
 	<Description>Lightweight mediator pattern with behavior pipeline and Result Pattern support.</Description>
 	<PackageTags>mediator pipeline cqrs result-pattern</PackageTags>
-	<RepositoryUrl>https://github.com/santacroce/dom.mediator</RepositoryUrl>
-	<PackageProjectUrl>https://github.com/santacroce/dom.mediator</PackageProjectUrl>
-	<RepositoryType>git</RepositoryType>
+	<RepositoryUrl>https://github.com/asantacroce/dom.mediator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/asantacroce/dom.mediator</PackageProjectUrl>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<IncludeSymbols>false</IncludeSymbols>
 	</PropertyGroup>
