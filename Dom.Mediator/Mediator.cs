@@ -2,16 +2,23 @@ using Dom.Mediator.Interfaces;
 using Dom.Mediator.Interfaces.Handlers;
 using Dom.Mediator.Models;
 using Dom.Mediator.ResultPattern;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Dom.Mediator;
 
-public class Mediator : IMediator
+internal class Mediator : IMediator
 {
     private readonly Dictionary<Type, object> _queryHandlers = new();
     private readonly Dictionary<Type, object> _commandHandlers = new();
+    private readonly List<Type> _requestResponseBehaviours = new();
+    private readonly List<Type> _commandBehaviours = new();
+    private readonly IServiceProvider? _serviceProvider;
 
-    private readonly Dictionary<Type, List<object>> _behaviours = new();
+    public Mediator(IServiceProvider? serviceProvider = null)
+    {
+        _serviceProvider = serviceProvider;
+    }
 
     public IEnumerable<Type> HandledRequestTypes { get { return _queryHandlers.Keys.Union(_commandHandlers.Keys); } }
 
@@ -49,19 +56,22 @@ public class Mediator : IMediator
         }
     }
 
-    public void AddRequestResponseBehaviour<TRequest, TResponse>(IPipelineBehavior<TRequest, TResponse> behaviour)
-        where TRequest : IRequest<TResponse>
+    public void AddRequestResponseBehaviour(Type behaviourType)
     {
-        AddBehaviour<TRequest>(behaviour);
+        if (!behaviourType.IsGenericType)
+            throw new ArgumentException("Behaviour type must be generic", nameof(behaviourType));
+
+        var genericTypeDefinition = behaviourType.GetGenericTypeDefinition();
+        _requestResponseBehaviours.Add(genericTypeDefinition);
     }
 
-    /// <summary>
-    /// Adds a behavior for commands without a response
-    /// </summary>
-    public void AddRequestBehaviour<TCommand>(IPipelineBehavior<TCommand> behaviour)
-        where TCommand : ICommand
+    public void AddCommandBehaviour(Type behaviourType)
     {
-        AddBehaviour<TCommand>(behaviour);
+        if (!behaviourType.IsGenericType)
+            throw new ArgumentException("Behaviour type must be generic", nameof(behaviourType));
+
+        var genericTypeDefinition = behaviourType.GetGenericTypeDefinition();
+        _commandBehaviours.Add(genericTypeDefinition);
     }
     #endregion
 
@@ -69,11 +79,29 @@ public class Mediator : IMediator
     public async Task<Result<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
     {
         var handlerRes = GetHandlerType(request);
+        var requestType = handlerRes.Item1;
 
         RequestHandlerDelegate<TResponse> next = () => handlerRes.Item2.Handle((dynamic)request, cancellationToken);
 
-        // Apply behaviors using the generic method
-        next = ApplyBehaviours(handlerRes.Item1, request, cancellationToken, next);
+        // Apply behaviors in reverse order (so the first registered behavior is the outermost)
+        foreach (var behaviourType in _requestResponseBehaviours.AsEnumerable().Reverse())
+        {
+            var concreteBehaviourType = behaviourType.MakeGenericType(requestType, typeof(TResponse));
+            
+            // Create behavior instance using service provider if available
+            object? behaviour;
+            if (_serviceProvider != null)
+            {
+                behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
+            }
+            else
+            {
+                behaviour = Activator.CreateInstance(concreteBehaviourType);
+            }
+
+            var currentNext = next;
+            next = () => ((dynamic)behaviour).Handle((dynamic)request, cancellationToken, currentNext);
+        }
         
         return await next();
     }
@@ -84,58 +112,36 @@ public class Mediator : IMediator
     public async Task<Result> Send(ICommand command, CancellationToken cancellationToken = default)
     {
         var handlerRes = GetHandlerType(command);
+        var commandType = handlerRes.Item1;
 
         CommandHandlerDelegate next = () => handlerRes.Item2.Handle((dynamic)command, cancellationToken);
 
-        // Apply behaviors using the generic method
-        next = ApplyBehaviours(handlerRes.Item1, command, cancellationToken, next);
+        // Apply behaviors in reverse order (so the first registered behavior is the outermost)
+        foreach (var behaviourType in _commandBehaviours.AsEnumerable().Reverse())
+        {
+            var concreteBehaviourType = behaviourType.MakeGenericType(commandType);
+            
+            // Create behavior instance using service provider if available
+            object? behaviour;
+            if (_serviceProvider != null)
+            {
+                behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
+            }
+            else
+            {
+                behaviour = Activator.CreateInstance(concreteBehaviourType);
+            }
+
+            var currentNext = next;
+            next = () => ((dynamic)behaviour).Handle((dynamic)command, cancellationToken, currentNext);
+        }
         
         return await next();
     }
     #endregion
 
     #region PRIVATE
-    private RequestHandlerDelegate<TResponse> ApplyBehaviours<TRequest, TResponse>(
-        Type requestType, 
-        TRequest request, 
-        CancellationToken cancellationToken,
-        RequestHandlerDelegate<TResponse> next)
-        where TRequest : IRequest<TResponse>
-    {
-        // Apply behaviors in reverse order (last registered = first executed)
-        if (_behaviours.TryGetValue(requestType, out var behaviours))
-        {
-            foreach (var behaviour in behaviours.Reverse<object>())
-            {
-                var currentNext = next;
-                var typedBehaviour = (dynamic)behaviour;
-                next = () => typedBehaviour.Handle((dynamic)request, cancellationToken, currentNext);
-            }
-        }
-
-        return next;
-    }
-
-    private CommandHandlerDelegate ApplyBehaviours<TCommand>(
-        Type requestType, 
-        TCommand command, 
-        CancellationToken cancellationToken,
-        CommandHandlerDelegate next)
-        where TCommand : ICommand
-    {
-        // Apply behaviors in reverse order (last registered = first executed)
-        if (_behaviours.TryGetValue(requestType, out var behaviours))
-        {
-            foreach (var behaviour in behaviours.Reverse<object>())
-            {
-                var currentNext = next;
-                var typedBehaviour = (dynamic)behaviour;
-                next = () => typedBehaviour.Handle((dynamic)command, cancellationToken, currentNext);
-            }
-        }
-
-        return next;
-    }
+    
     
     private dynamic GetHandler(Type requestType)
     {
@@ -154,19 +160,6 @@ public class Mediator : IMediator
         return null;
     }
     
-    private void AddBehaviour<T>(object behaviour)
-    {
-        var commandType = typeof(T);
-
-        if (!_behaviours.TryGetValue(commandType, out var behaviours))
-        {
-            behaviours = new List<object>();
-            _behaviours[commandType] = behaviours;
-        }
-
-        behaviours.Add(behaviour);
-    }
-    
     private (Type, dynamic) GetHandlerType(object request)
     {
         var requestType = request.GetType();
@@ -177,5 +170,7 @@ public class Mediator : IMediator
 
         return (requestType, handler);
     }
+
+    
     #endregion
 }

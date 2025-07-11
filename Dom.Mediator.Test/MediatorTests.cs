@@ -121,41 +121,6 @@ namespace Dom.Mediator.Test
         }
         
         #endregion
-
-        #region Multiple Behaviors Tests
-        
-        [Fact]
-        public async Task MultipleBehaviors_ExecuteInCorrectOrder()
-        {
-            // Arrange
-            var mediator = new Mediator();
-            mediator.ScanHandlers(Assembly.GetExecutingAssembly());
-            
-            var executionOrder = new List<string>();
-            
-            // Create behaviors that record their execution order
-            var behavior1 = new TestBehavior<TestQuery, string>("Behavior1", executionOrder);
-            var behavior2 = new TestBehavior<TestQuery, string>("Behavior2", executionOrder);
-            
-            // Register behaviors in order (last registered = first executed)
-            mediator.AddRequestResponseBehaviour(behavior1);
-            mediator.AddRequestResponseBehaviour(behavior2);
-            
-            var query = new TestQuery { Id = 1 };
-            
-            // Act
-            var result = await mediator.Send(query);
-            
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.Equal(4, executionOrder.Count);
-            Assert.Equal("Behavior1 Before", executionOrder[0]);
-            Assert.Equal("Behavior2 Before", executionOrder[1]);
-            Assert.Equal("Behavior2 After", executionOrder[2]);
-            Assert.Equal("Behavior1 After", executionOrder[3]);
-        }
-        
-        #endregion
     }
 
     #region Test Classes

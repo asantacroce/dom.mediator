@@ -1,5 +1,6 @@
 using Dom.Mediator.Interfaces;
 using Dom.Mediator.ResultPattern;
+using System.Reflection;
 
 namespace Dom.Mediator;
 
@@ -8,6 +9,20 @@ namespace Dom.Mediator;
 /// </summary>
 public interface IMediator
 {
+    void ScanHandlers(params Assembly[] assemblies);
+
+    /// <summary>
+    /// Adds a behavior to the request/response pipeline
+    /// </summary>
+    /// <param name="behaviorType">The generic behavior type to add</param>
+    void AddRequestResponseBehaviour(Type behaviorType);
+    
+    /// <summary>
+    /// Adds a behavior to the command pipeline
+    /// </summary>
+    /// <param name="behaviorType">The generic behavior type to add</param>
+    void AddCommandBehaviour(Type behaviorType);
+
     /// <summary>
     /// Sends a request to a single handler
     /// </summary>

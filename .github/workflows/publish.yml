@@ -19,16 +19,16 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Copy README and LICENSE to root
-        run: |
-          cp Dom.Mediator/README.md README.md
-          cp Dom.Mediator/LICENSE LICENSE
-
       - name: Restore dependencies
         run: dotnet restore Dom.Mediator/Dom.Mediator.csproj
 
       - name: Build
         run: dotnet build Dom.Mediator/Dom.Mediator.csproj -c Release --no-restore
+
+      - name: Copy README and LICENSE into package folder
+        run: |
+            cp README.md Dom.Mediator/README.md
+            cp LICENSE Dom.Mediator/LICENSE
 
       - name: Pack NuGet package
         run: dotnet pack Dom.Mediator/Dom.Mediator.csproj -c Release --no-build --output ./nupkg
