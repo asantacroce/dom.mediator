@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dom.Mediator\Dom.Mediator.csproj" />
-    <ProjectReference Include="..\SimpleApi\SimpleApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

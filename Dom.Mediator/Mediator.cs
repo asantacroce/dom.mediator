@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Dom.Mediator;
 
-public class Mediator
+public class Mediator : IMediator
 {
     private readonly Dictionary<Type, object> _queryHandlers = new();
     private readonly Dictionary<Type, object> _commandHandlers = new();
