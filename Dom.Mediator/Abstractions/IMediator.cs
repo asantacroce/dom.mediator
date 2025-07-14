@@ -1,15 +1,13 @@
-using Dom.Mediator.Interfaces;
-using Dom.Mediator.ResultPattern;
 using System.Reflection;
 
-namespace Dom.Mediator;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Defines the mediator interface for sending requests/commands to their handlers
 /// </summary>
 public interface IMediator
 {
-    void ScanHandlers(params Assembly[] assemblies);
+    void RegisterHandlers(params Assembly[] assemblies);
 
     /// <summary>
     /// Adds a behavior to the request/response pipeline

@@ -1,7 +1,4 @@
-﻿using Dom.Mediator.Interfaces;
-using Dom.Mediator.Interfaces.Handlers;
-using Dom.Mediator.Models;
-using Dom.Mediator.ResultPattern;
+﻿using Dom.Mediator.Abstractions;
 using System.Reflection;
 
 namespace Dom.Mediator.Test
@@ -14,8 +11,8 @@ namespace Dom.Mediator.Test
         public async Task Query_WithValidRequest_ReturnsSuccessResult()
         {
             // Arrange
-            var mediator = new Mediator();
-            mediator.ScanHandlers(Assembly.GetExecutingAssembly());
+            var mediator = new Implementation.Mediator();
+            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
             
             var query = new TestQuery { Id = 1 };
             
@@ -31,7 +28,7 @@ namespace Dom.Mediator.Test
         public async Task Query_WithNoHandler_ThrowsException()
         {
             // Arrange
-            var mediator = new Mediator();
+            var mediator = new Implementation.Mediator();
             var query = new NoHandlerQuery { Id = 1 };
             
             // Act & Assert
@@ -50,8 +47,8 @@ namespace Dom.Mediator.Test
         public async Task CommandWithResponse_WithValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var mediator = new Mediator();
-            mediator.ScanHandlers(Assembly.GetExecutingAssembly());
+            var mediator = new Implementation.Mediator();
+            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
             
             var command = new TestCommandWithResponse { Value = "test" };
             
@@ -67,8 +64,8 @@ namespace Dom.Mediator.Test
         public async Task CommandWithResponse_WithHandlerReturningError_ReturnsFailureResult()
         {
             // Arrange
-            var mediator = new Mediator();
-            mediator.ScanHandlers(Assembly.GetExecutingAssembly());
+            var mediator = new Implementation.Mediator();
+            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
             
             var command = new TestCommandWithResponse { Value = "error" };
             
@@ -77,9 +74,9 @@ namespace Dom.Mediator.Test
             
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Equal("ERROR_CODE", result.Errors[0].Code);
-            Assert.Equal("Error occurred", result.Errors[0].Description);
-            Assert.Equal(ErrorType.Validation, result.Errors[0].Type);
+            Assert.Equal("ERROR_CODE", result.Error.Code);
+            Assert.Equal("Error occurred", result.Error.Description);
+            Assert.Equal("Validation", result.Error.Type);
         }
         
         #endregion
@@ -90,8 +87,8 @@ namespace Dom.Mediator.Test
         public async Task CommandWithoutResponse_WithValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var mediator = new Mediator();
-            mediator.ScanHandlers(Assembly.GetExecutingAssembly());
+            var mediator = new Implementation.Mediator();
+            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
             
             var command = new TestCommand { Value = "test" };
             
@@ -106,8 +103,8 @@ namespace Dom.Mediator.Test
         public async Task CommandWithoutResponse_WithHandlerReturningError_ReturnsFailureResult()
         {
             // Arrange
-            var mediator = new Mediator();
-            mediator.ScanHandlers(Assembly.GetExecutingAssembly());
+            var mediator = new Implementation.Mediator();
+            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
             
             var command = new TestCommand { Value = "error" };
             
@@ -116,8 +113,8 @@ namespace Dom.Mediator.Test
             
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Equal("ERROR_CODE", result.Errors[0].Code);
-            Assert.Equal("Error occurred", result.Errors[0].Description);
+            Assert.Equal("ERROR_CODE", result.Error.Code);
+            Assert.Equal("Error occurred", result.Error.Description);
         }
         
         #endregion
@@ -156,7 +153,7 @@ namespace Dom.Mediator.Test
         {
             if (request.Value == "error")
             {
-                return Task.FromResult(Result<string>.Failure("ERROR_CODE", "Error occurred", ErrorType.Validation));
+                return Task.FromResult(Result<string>.Failure("ERROR_CODE", "Error occurred", "Validation"));
             }
             
             return Task.FromResult(Result<string>.Success($"Response: {request.Value}"));
@@ -175,7 +172,7 @@ namespace Dom.Mediator.Test
         {
             if (request.Value == "error")
             {
-                return Task.FromResult(Result.Failure("ERROR_CODE", "Error occurred"));
+                return Task.FromResult(Result.Failure("ERROR_CODE", "Error occurred", "Error"));
             }
             
             return Task.FromResult(Result.Success());

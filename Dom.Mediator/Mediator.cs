@@ -1,13 +1,10 @@
-using Dom.Mediator.Interfaces;
-using Dom.Mediator.Interfaces.Handlers;
-using Dom.Mediator.Models;
-using Dom.Mediator.ResultPattern;
+using Dom.Mediator.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Dom.Mediator;
+namespace Dom.Mediator.Implementation;
 
-internal class Mediator : IMediator
+public class Mediator : IMediator
 {
     private readonly Dictionary<Type, object> _queryHandlers = new();
     private readonly Dictionary<Type, object> _commandHandlers = new();
@@ -23,7 +20,7 @@ internal class Mediator : IMediator
     public IEnumerable<Type> HandledRequestTypes { get { return _queryHandlers.Keys.Union(_commandHandlers.Keys); } }
 
     #region INIT
-    public void ScanHandlers(params Assembly[] assemblies)
+    public void RegisterHandlers(params Assembly[] assemblies)
     {
         var types = assemblies.SelectMany(a => a.GetTypes())
                               .Where(t => !t.IsAbstract && !t.IsInterface)

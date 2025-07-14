@@ -1,4 +1,4 @@
-namespace Dom.Mediator.Interfaces;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Generic interface for a request that can be handled by a mediator.

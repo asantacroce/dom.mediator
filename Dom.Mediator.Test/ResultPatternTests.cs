@@ -1,5 +1,3 @@
-using Dom.Mediator.ResultPattern;
-
 namespace Dom.Mediator.Test
 {
     public class ResultPatternTests
@@ -19,7 +17,6 @@ namespace Dom.Mediator.Test
             Assert.True(result.IsSuccess);
             Assert.False(result.IsFailure);
             Assert.Equal(value, result.Value);
-            Assert.Empty(result.Errors);
         }
         
         [Fact]
@@ -28,7 +25,7 @@ namespace Dom.Mediator.Test
             // Arrange
             string errorCode = "ERROR_CODE";
             string errorDescription = "Error description";
-            ErrorType errorType = ErrorType.Validation;
+            string errorType = "Validation";
             
             // Act
             var result = Result<string>.Failure(errorCode, errorDescription, errorType);
@@ -37,33 +34,11 @@ namespace Dom.Mediator.Test
             Assert.False(result.IsSuccess);
             Assert.True(result.IsFailure);
             Assert.Null(result.Value);
-            Assert.Single(result.Errors);
-            Assert.Equal(errorCode, result.Errors[0].Code);
-            Assert.Equal(errorDescription, result.Errors[0].Description);
-            Assert.Equal(errorType, result.Errors[0].Type);
+            Assert.Equal(errorCode, result.Error.Code);
+            Assert.Equal(errorDescription, result.Error.Description);
+            Assert.Equal(errorType, result.Error.Type);
         }
-        
-        [Fact]
-        public void ResultT_FailureWithMultipleErrors_SetsCorrectProperties()
-        {
-            // Arrange
-            var errors = new List<Error>
-            {
-                new Error("ERROR_1", "First error", ErrorType.Validation),
-                new Error("ERROR_2", "Second error", ErrorType.NotFound)
-            };
-            
-            // Act
-            var result = Result<string>.Failure(errors);
-            
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.True(result.IsFailure);
-            Assert.Null(result.Value);
-            Assert.Equal(2, result.Errors.Count);
-            Assert.Equal(errors, result.Errors);
-        }
-        
+         
         #endregion
         
         #region Result Tests
@@ -77,7 +52,6 @@ namespace Dom.Mediator.Test
             // Assert
             Assert.True(result.IsSuccess);
             Assert.False(result.IsFailure);
-            Assert.Empty(result.Errors);
         }
         
         [Fact]
@@ -86,7 +60,7 @@ namespace Dom.Mediator.Test
             // Arrange
             string errorCode = "ERROR_CODE";
             string errorDescription = "Error description";
-            ErrorType errorType = ErrorType.Validation;
+            string errorType = "Validation";
             
             // Act
             var result = Result.Failure(errorCode, errorDescription, errorType);
@@ -94,30 +68,9 @@ namespace Dom.Mediator.Test
             // Assert
             Assert.False(result.IsSuccess);
             Assert.True(result.IsFailure);
-            Assert.Single(result.Errors);
-            Assert.Equal(errorCode, result.Errors[0].Code);
-            Assert.Equal(errorDescription, result.Errors[0].Description);
-            Assert.Equal(errorType, result.Errors[0].Type);
-        }
-        
-        [Fact]
-        public void Result_FailureWithMultipleErrors_SetsCorrectProperties()
-        {
-            // Arrange
-            var errors = new List<Error>
-            {
-                new Error("ERROR_1", "First error", ErrorType.Validation),
-                new Error("ERROR_2", "Second error", ErrorType.NotFound)
-            };
-            
-            // Act
-            var result = Result.Failure(errors);
-            
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.True(result.IsFailure);
-            Assert.Equal(2, result.Errors.Count);
-            Assert.Equal(errors, result.Errors);
+            Assert.Equal(errorCode, result.Error.Code);
+            Assert.Equal(errorDescription, result.Error.Description);
+            Assert.Equal(errorType, result.Error.Type);
         }
         
         #endregion
@@ -130,7 +83,7 @@ namespace Dom.Mediator.Test
             // Arrange
             string code = "ERROR_CODE";
             string description = "Error description";
-            ErrorType type = ErrorType.NotFound;
+            string type = "NotFound";
             
             // Act
             var error = new Error(code, description, type);
@@ -139,16 +92,6 @@ namespace Dom.Mediator.Test
             Assert.Equal(code, error.Code);
             Assert.Equal(description, error.Description);
             Assert.Equal(type, error.Type);
-        }
-        
-        [Fact]
-        public void Error_WithDefaultErrorType_SetsTypeToUnknown()
-        {
-            // Act
-            var error = new Error("CODE", "Description");
-            
-            // Assert
-            Assert.Equal(ErrorType.Unknown, error.Type);
         }
         
         #endregion

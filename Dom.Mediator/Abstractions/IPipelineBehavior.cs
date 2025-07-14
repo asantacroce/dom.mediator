@@ -1,7 +1,4 @@
-using Dom.Mediator.Models;
-using Dom.Mediator.ResultPattern;
-
-namespace Dom.Mediator.Interfaces;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Defines a behavior in the processing pipeline for handling requests and responses.

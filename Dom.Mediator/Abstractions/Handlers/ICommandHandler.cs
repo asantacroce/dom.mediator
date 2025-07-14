@@ -1,6 +1,4 @@
-using Dom.Mediator.ResultPattern;
-
-namespace Dom.Mediator.Interfaces.Handlers;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Defines a handler for a command without a return value

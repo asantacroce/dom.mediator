@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Dom.Mediator.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Dom.Mediator.DependencyInjection;
+namespace Dom.Mediator;
 
 public static class MediatorDependencyExtentions
 {
@@ -8,7 +9,7 @@ public static class MediatorDependencyExtentions
     {
         // We register the IMediator interface and its implementation
         services.AddSingleton<IMediator>(serviceProvider => { 
-            Mediator mediator = new Mediator(serviceProvider);
+            Implementation.Mediator mediator = new (serviceProvider);
 
             // Apply any configuration passed in
             config(mediator);

@@ -1,4 +1,4 @@
-namespace Dom.Mediator.Interfaces;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Represents a query that returns a specific response type

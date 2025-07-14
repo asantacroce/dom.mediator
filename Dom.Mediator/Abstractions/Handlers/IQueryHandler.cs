@@ -1,6 +1,6 @@
-using Dom.Mediator.ResultPattern;
+using Dom.Mediator;
 
-namespace Dom.Mediator.Interfaces.Handlers;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Defines a handler for a query that returns a response

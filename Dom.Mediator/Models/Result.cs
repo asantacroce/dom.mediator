@@ -1,35 +1,37 @@
-namespace Dom.Mediator.ResultPattern;
-
-public record Error(string Code, string Description, ErrorType Type = ErrorType.Unknown);
+namespace Dom.Mediator;
 
 public class Result<T>
 {
     public bool IsSuccess { get; }
-    public List<Error> Errors { get; }
+    public Error Error { get; }
 
     public T? Value { get; }
 
     public bool IsFailure => !IsSuccess;
 
-    private Result(bool isSuccess, T? value, List<Error> errors)
+    private Result(bool isSuccess, T? value, Error error)
     {
         IsSuccess = isSuccess;
         Value = value;
-        Errors = errors;
+        Error = error;
     }
 
-    public static Result<T> Success(T value) => new(true, value, new List<Error>());
+    public static Result<T> Success(T value) => new(true, value, null);
 
-    public static Result<T> Failure(string errorCode, string description, ErrorType type = ErrorType.Unknown)
+    public static Result<T> Failure(
+        string errorCode, 
+        string description, 
+        string type)
     { 
-        List<Error> errors = new List<Error> { new(errorCode, description, type) };
+        Error error = new Error(errorCode, description, type);
 
-        return new Result<T>(false, default, errors);
+        return new Result<T>(false, default, error);
     }
 
-    public static Result<T> Failure(List<Error> errors)
+    public static Result<T> Failure(
+        Error error)
     {
-        return new Result<T>(false, default, errors);
+        return new Result<T>(false, default, error);
     }
 }
 
@@ -39,25 +41,28 @@ public class Result<T>
 public class Result
 {
     public bool IsSuccess { get; }
-    public List<Error> Errors { get; }
+    public Error Error { get; }
     public bool IsFailure => !IsSuccess;
 
-    private Result(bool isSuccess, List<Error> errors)
+    private Result(bool isSuccess, Error error)
     {
         IsSuccess = isSuccess;
-        Errors = errors;
+        Error = error;
     }
 
-    public static Result Success() => new(true, new List<Error>());
+    public static Result Success() => new(true, null);
 
-    public static Result Failure(string errorCode, string description, ErrorType type = ErrorType.Unknown)
+    public static Result Failure(
+        string errorCode, 
+        string description, 
+        string type)
     { 
-        List<Error> errors = new List<Error> { new(errorCode, description, type) };
-        return new Result(false, errors);
+        Error error = new(errorCode, description, type);
+        return new Result(false, error);
     }
 
-    public static Result Failure(List<Error> errors)
+    public static Result Failure(Error error)
     {
-        return new Result(false, errors);
+        return new Result(false, error);
     }
 }

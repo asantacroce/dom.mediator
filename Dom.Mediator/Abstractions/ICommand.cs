@@ -1,4 +1,4 @@
-namespace Dom.Mediator.Interfaces;
+namespace Dom.Mediator.Abstractions;
 
 /// <summary>
 /// Represents a command that performs an action but doesn't return a value
