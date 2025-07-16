@@ -6,8 +6,8 @@ namespace Dom.Mediator.Implementation;
 
 public class Mediator : IMediator
 {
-    private readonly Dictionary<Type, object> _queryHandlers = new();
-    private readonly Dictionary<Type, object> _commandHandlers = new();
+    private readonly Dictionary<Type, Type> _queryHandler = new();
+    private readonly Dictionary<Type, Type> _commandHandler = new();
     private readonly List<Type> _requestResponseBehaviours = new();
     private readonly List<Type> _commandBehaviours = new();
     private readonly IServiceProvider? _serviceProvider;
@@ -16,8 +16,6 @@ public class Mediator : IMediator
     {
         _serviceProvider = serviceProvider;
     }
-
-    public IEnumerable<Type> HandledRequestTypes { get { return _queryHandlers.Keys.Union(_commandHandlers.Keys); } }
 
     #region INIT
     public void RegisterHandlers(params Assembly[] assemblies)
@@ -34,20 +32,17 @@ public class Mediator : IMediator
 
                 var def = iface.GetGenericTypeDefinition();
 
-                if (
-                    def == typeof(IQueryHandler<,>)
-                    )
+                if (def == typeof(IQueryHandler<,>))
                 {
                     var requestType = iface.GetGenericArguments()[0];
-                    _queryHandlers[requestType] = ActivatorUtilities.CreateInstance(_serviceProvider, type);
+                    _queryHandler[requestType] = type;
                 }
                 else if (
                     def == typeof(ICommandHandler<>) ||
-                    def == typeof(ICommandHandler<,>)
-                    )
+                    def == typeof(ICommandHandler<,>))
                 {
                     var commandType = iface.GetGenericArguments()[0];
-                    _commandHandlers[commandType] = ActivatorUtilities.CreateInstance(_serviceProvider, type);
+                    _commandHandler[commandType] = type;
                 }
             }
         }
@@ -126,19 +121,16 @@ public class Mediator : IMediator
 
     private dynamic GetHandler(Type requestType)
     {
-        if (_queryHandlers.TryGetValue(requestType, out var queryObj))
+        if (_queryHandler.TryGetValue(requestType, out var handlerType))
         {
-            return (dynamic)queryObj;
+            return ActivatorUtilities.CreateInstance(_serviceProvider, handlerType);
         }
-        else
+        else if (_commandHandler.TryGetValue(requestType, out var commandHandlerType))
         {
-            if (_commandHandlers.TryGetValue(requestType, out var handlerObj))
-            {
-                return (dynamic)handlerObj;
-            }
+            return ActivatorUtilities.CreateInstance(_serviceProvider, commandHandlerType);
         }
 
-        return null;
+        throw new ApplicationException($"Handler not registered for type: {requestType.Name}");
     }
 
     private (Type, dynamic) GetHandlerType(object request)
