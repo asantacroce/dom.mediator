@@ -39,7 +39,7 @@ public class Mediator : IMediator
                     )
                 {
                     var requestType = iface.GetGenericArguments()[0];
-                    _queryHandlers[requestType] = _serviceProvider.GetRequiredService(type);
+                    _queryHandlers[requestType] = ActivatorUtilities.CreateInstance(_serviceProvider, type);
                 }
                 else if (
                     def == typeof(ICommandHandler<>) ||
@@ -47,7 +47,7 @@ public class Mediator : IMediator
                     )
                 {
                     var commandType = iface.GetGenericArguments()[0];
-                    _commandHandlers[commandType] = _serviceProvider.GetRequiredService(type);
+                    _commandHandlers[commandType] = ActivatorUtilities.CreateInstance(_serviceProvider, type);
                 }
             }
         }
@@ -84,22 +84,14 @@ public class Mediator : IMediator
         foreach (var behaviourType in _requestResponseBehaviours.AsEnumerable().Reverse())
         {
             var concreteBehaviourType = behaviourType.MakeGenericType(requestType, typeof(TResponse));
-            
-            // Create behavior instance using service provider if available
-            object? behaviour;
-            if (_serviceProvider != null)
-            {
-                behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
-            }
-            else
-            {
-                behaviour = Activator.CreateInstance(concreteBehaviourType);
-            }
+
+            // Create behavior instance using service provider
+            object? behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
 
             var currentNext = next;
             next = () => ((dynamic)behaviour).Handle((dynamic)request, cancellationToken, currentNext);
         }
-        
+
         return await next();
     }
 
@@ -117,29 +109,21 @@ public class Mediator : IMediator
         foreach (var behaviourType in _commandBehaviours.AsEnumerable().Reverse())
         {
             var concreteBehaviourType = behaviourType.MakeGenericType(commandType);
-            
+
             // Create behavior instance using service provider if available
-            object? behaviour;
-            if (_serviceProvider != null)
-            {
-                behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
-            }
-            else
-            {
-                behaviour = Activator.CreateInstance(concreteBehaviourType);
-            }
+            object? behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
 
             var currentNext = next;
             next = () => ((dynamic)behaviour).Handle((dynamic)command, cancellationToken, currentNext);
         }
-        
+
         return await next();
     }
     #endregion
 
     #region PRIVATE
-    
-    
+
+
     private dynamic GetHandler(Type requestType)
     {
         if (_queryHandlers.TryGetValue(requestType, out var queryObj))
@@ -156,7 +140,7 @@ public class Mediator : IMediator
 
         return null;
     }
-    
+
     private (Type, dynamic) GetHandlerType(object request)
     {
         var requestType = request.GetType();
@@ -168,6 +152,6 @@ public class Mediator : IMediator
         return (requestType, handler);
     }
 
-    
+
     #endregion
 }
