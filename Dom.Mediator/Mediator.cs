@@ -39,7 +39,7 @@ public class Mediator : IMediator
                     )
                 {
                     var requestType = iface.GetGenericArguments()[0];
-                    _queryHandlers[requestType] = Activator.CreateInstance(type)!;
+                    _queryHandlers[requestType] = _serviceProvider.GetRequiredService(type);
                 }
                 else if (
                     def == typeof(ICommandHandler<>) ||
@@ -47,7 +47,7 @@ public class Mediator : IMediator
                     )
                 {
                     var commandType = iface.GetGenericArguments()[0];
-                    _commandHandlers[commandType] = Activator.CreateInstance(type)!;
+                    _commandHandlers[commandType] = _serviceProvider.GetRequiredService(type);
                 }
             }
         }
