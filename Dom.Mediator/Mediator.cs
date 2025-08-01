@@ -12,9 +12,9 @@ public class Mediator : IMediator
     private readonly Dictionary<Type, Type> _commandHandler = new();
     private readonly List<Type> _requestResponseBehaviours = new();
     private readonly List<Type> _commandBehaviours = new();
-    private readonly IServiceProvider? _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
-    public Mediator(IServiceProvider? serviceProvider = null)
+    public Mediator(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
