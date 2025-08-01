@@ -1,5 +1,7 @@
 using Dom.Mediator.Abstractions;
+using Dom.Mediator.Models;
 using Microsoft.Extensions.DependencyInjection;
+using System.Data;
 using System.Reflection;
 
 namespace Dom.Mediator.Implementation;
@@ -35,6 +37,13 @@ public class Mediator : IMediator
                 if (def == typeof(IQueryHandler<,>))
                 {
                     var requestType = iface.GetGenericArguments()[0];
+
+                    if (requestType.IsNotPublic)
+                        throw new MediatorException($"The type '{type}' which defines the 'Query' must be declared as public.");
+
+                    if (type.IsNotPublic)
+                        throw new MediatorException($"The type '{type}' which implements a 'Query Handler' must be declared as public.");
+
                     _queryHandler[requestType] = type;
                 }
                 else if (
@@ -42,6 +51,13 @@ public class Mediator : IMediator
                     def == typeof(ICommandHandler<,>))
                 {
                     var commandType = iface.GetGenericArguments()[0];
+
+                    if (commandType.IsNotPublic)
+                        throw new MediatorException($"The type '{commandType}' which defines the 'Command' must be declared as public.");
+
+                    if (type.IsNotPublic)
+                        throw new MediatorException($"The type '{type}' which implements a 'Command Handler' must be declared as public.");
+
                     _commandHandler[commandType] = type;
                 }
             }
@@ -130,7 +146,7 @@ public class Mediator : IMediator
             return ActivatorUtilities.CreateInstance(_serviceProvider, commandHandlerType);
         }
 
-        throw new ApplicationException($"Handler not registered for type: {requestType.Name}");
+        throw new MediatorException($"Handler not registered for type: {requestType.Name}");
     }
 
     private (Type, dynamic) GetHandlerType(object request)
@@ -139,7 +155,7 @@ public class Mediator : IMediator
         dynamic handler = GetHandler(requestType);
 
         if (handler is null)
-            throw new ApplicationException($"Handler not registered for type: {requestType.Name}");
+            throw new MediatorException($"Handler not registered for type: {requestType.Name}");
 
         return (requestType, handler);
     }
