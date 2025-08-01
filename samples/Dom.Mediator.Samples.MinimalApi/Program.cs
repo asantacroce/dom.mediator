@@ -1,5 +1,6 @@
 using Dom.Mediator;
-using Dom.Mediator.Samples.MinimalApi;
+using Dom.Mediator.Samples.MinimalApi.Infrastructure.Behaviours;
+using Dom.Mediator.Samples.MinimalApi.Infrastructure.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 

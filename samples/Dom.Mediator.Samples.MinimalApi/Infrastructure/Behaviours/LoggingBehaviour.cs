@@ -1,7 +1,7 @@
 ﻿using Dom.Mediator.Abstractions;
 using System.Text.Json;
 
-namespace Dom.Mediator.Samples.MinimalApi;
+namespace Dom.Mediator.Samples.MinimalApi.Infrastructure.Behaviours;
 
 public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

@@ -1,6 +1,7 @@
 ﻿using Dom.Mediator.Abstractions;
+using Dom.Mediator.Samples.MinimalApi.Infrastructure.Results;
 
-namespace Dom.Mediator.Samples.MinimalApi;
+namespace Dom.Mediator.Samples.MinimalApi.Infrastructure.Endpoints;
 
 public static class Endpoints
 {

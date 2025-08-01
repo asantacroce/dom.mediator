@@ -1,23 +1,17 @@
-namespace Dom.Mediator.Samples.MinimalApi;
+﻿namespace Dom.Mediator.Samples.MinimalApi.Infrastructure.Results;
 
-public static class ResultExtensions
+public class HttpResult : IResult
 {
-    public static IResult ToIResult<T>(this Result<T> result) => new ResultExtension<T>(result);
-    public static IResult ToIResult(this Result result) => new ResultExtension(result);
-}
+    private readonly Result _result;
 
-public class ResultExtension<T> : IResult
-{
-    private readonly Result<T> _result;
-
-    public ResultExtension(Result<T> result) => _result = result;
+    public HttpResult(Result result) => _result = result;
 
     public async Task ExecuteAsync(HttpContext httpContext)
     {
         httpContext.Response.StatusCode = GetStatusCode(_result.Error);
 
         object payload = _result.IsSuccess
-            ? _result.Value!
+            ? new { }
             : new { _result.Error };
 
         await httpContext.Response.WriteAsJsonAsync(payload);
@@ -35,18 +29,18 @@ public class ResultExtension<T> : IResult
     }
 }
 
-public class ResultExtension : IResult
+public class HttpResult<T> : IResult
 {
-    private readonly Result _result;
+    private readonly Result<T> _result;
 
-    public ResultExtension(Result result) => _result = result;
+    public HttpResult(Result<T> result) => _result = result;
 
     public async Task ExecuteAsync(HttpContext httpContext)
     {
         httpContext.Response.StatusCode = GetStatusCode(_result.Error);
 
         object payload = _result.IsSuccess
-            ? new { }
+            ? _result.Value!
             : new { _result.Error };
 
         await httpContext.Response.WriteAsJsonAsync(payload);
