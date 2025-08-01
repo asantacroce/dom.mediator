@@ -3,13 +3,13 @@ namespace Dom.Mediator;
 public class Result<T>
 {
     public bool IsSuccess { get; }
-    public Error Error { get; }
+    public Error? Error { get; }
 
     public T? Value { get; }
 
     public bool IsFailure => !IsSuccess;
 
-    private Result(bool isSuccess, T? value, Error error)
+    private Result(bool isSuccess, T? value, Error? error)
     {
         IsSuccess = isSuccess;
         Value = value;
@@ -41,10 +41,10 @@ public class Result<T>
 public class Result
 {
     public bool IsSuccess { get; }
-    public Error Error { get; }
+    public Error? Error { get; }
     public bool IsFailure => !IsSuccess;
 
-    private Result(bool isSuccess, Error error)
+    private Result(bool isSuccess, Error? error)
     {
         IsSuccess = isSuccess;
         Error = error;
