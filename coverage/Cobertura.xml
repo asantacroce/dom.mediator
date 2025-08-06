@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.6639344262295082" branch-rate="0.6153846153846154" lines-covered="81" lines-valid="122" branches-covered="32" branches-valid="52" complexity="63" version="0" timestamp="1754495085">
+<coverage line-rate="0.6639344262295082" branch-rate="0.6153846153846154" lines-covered="81" lines-valid="122" branches-covered="32" branches-valid="52" complexity="63" version="0" timestamp="1754495457">
   <sources>
     <source>/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/</source>
   </sources>
