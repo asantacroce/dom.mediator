@@ -1,18 +1,28 @@
 ﻿using Dom.Mediator.Abstractions;
+using Dom.Mediator.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Dom.Mediator.Test
 {
     public class MediatorTests
     {
+        private static Implementation.Mediator CreateMediator()
+        {
+            var services = new ServiceCollection();
+            var serviceProvider = services.BuildServiceProvider();
+            var mediator = new Implementation.Mediator(serviceProvider);
+            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
+            return mediator;
+        }
+
         #region Query Tests
         
         [Fact]
         public async Task Query_WithValidRequest_ReturnsSuccessResult()
         {
             // Arrange
-            var mediator = new Implementation.Mediator();
-            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
+            var mediator = CreateMediator();
             
             var query = new TestQuery { Id = 1 };
             
@@ -28,11 +38,11 @@ namespace Dom.Mediator.Test
         public async Task Query_WithNoHandler_ThrowsException()
         {
             // Arrange
-            var mediator = new Implementation.Mediator();
+            var mediator = CreateMediator();
             var query = new NoHandlerQuery { Id = 1 };
             
             // Act & Assert
-            var exception = await Assert.ThrowsAsync<ApplicationException>(
+            var exception = await Assert.ThrowsAsync<MediatorException>(
                 async () => await mediator.Send(query));
             
             Assert.Contains("Handler not registered for type", exception.Message);
@@ -47,8 +57,7 @@ namespace Dom.Mediator.Test
         public async Task CommandWithResponse_WithValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var mediator = new Implementation.Mediator();
-            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
+            var mediator = CreateMediator();
             
             var command = new TestCommandWithResponse { Value = "test" };
             
@@ -64,8 +73,7 @@ namespace Dom.Mediator.Test
         public async Task CommandWithResponse_WithHandlerReturningError_ReturnsFailureResult()
         {
             // Arrange
-            var mediator = new Implementation.Mediator();
-            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
+            var mediator = CreateMediator();
             
             var command = new TestCommandWithResponse { Value = "error" };
             
@@ -74,6 +82,7 @@ namespace Dom.Mediator.Test
             
             // Assert
             Assert.True(result.IsFailure);
+            Assert.NotNull(result.Error);
             Assert.Equal("ERROR_CODE", result.Error.Code);
             Assert.Equal("Error occurred", result.Error.Description);
             Assert.Equal("Validation", result.Error.Type);
@@ -87,8 +96,7 @@ namespace Dom.Mediator.Test
         public async Task CommandWithoutResponse_WithValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var mediator = new Implementation.Mediator();
-            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
+            var mediator = CreateMediator();
             
             var command = new TestCommand { Value = "test" };
             
@@ -103,8 +111,7 @@ namespace Dom.Mediator.Test
         public async Task CommandWithoutResponse_WithHandlerReturningError_ReturnsFailureResult()
         {
             // Arrange
-            var mediator = new Implementation.Mediator();
-            mediator.RegisterHandlers(Assembly.GetExecutingAssembly());
+            var mediator = CreateMediator();
             
             var command = new TestCommand { Value = "error" };
             
@@ -113,6 +120,7 @@ namespace Dom.Mediator.Test
             
             // Assert
             Assert.True(result.IsFailure);
+            Assert.NotNull(result.Error);
             Assert.Equal("ERROR_CODE", result.Error.Code);
             Assert.Equal("Error occurred", result.Error.Description);
         }

@@ -34,6 +34,7 @@ namespace Dom.Mediator.Test
             Assert.False(result.IsSuccess);
             Assert.True(result.IsFailure);
             Assert.Null(result.Value);
+            Assert.NotNull(result.Error);
             Assert.Equal(errorCode, result.Error.Code);
             Assert.Equal(errorDescription, result.Error.Description);
             Assert.Equal(errorType, result.Error.Type);
@@ -68,6 +69,7 @@ namespace Dom.Mediator.Test
             // Assert
             Assert.False(result.IsSuccess);
             Assert.True(result.IsFailure);
+            Assert.NotNull(result.Error);
             Assert.Equal(errorCode, result.Error.Code);
             Assert.Equal(errorDescription, result.Error.Description);
             Assert.Equal(errorType, result.Error.Type);
