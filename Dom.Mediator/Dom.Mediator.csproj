@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Dom.Mediator.Test</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="" />
+		<None Include="LICENSE" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+	</ItemGroup>
+
+	<PropertyGroup>
+	<TargetFramework>net8.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+
+	<PackageId>Dom.Mediator</PackageId>
+	<Version>1.0.1</Version>
+	<Authors>André Dominic Santacroce</Authors>
+	<Company>André Dominic Santacroce - https://www.andresantacroce.com</Company>
+	<Description>Lightweight mediator pattern with behavior pipeline and Result Pattern support.</Description>
+	<PackageTags>mediator pipeline cqrs result-pattern</PackageTags>
+	<RepositoryUrl>https://github.com/asantacroce/dom.mediator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/asantacroce/dom.mediator</PackageProjectUrl>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	<IncludeSymbols>false</IncludeSymbols>
+	</PropertyGroup>
+</Project>
