@@ -74,6 +74,8 @@ builder.Services.AddMediator(config =>
 
 Check out the [**samples**](./samples/) directory for complete working examples:
 
+> 🧪 **Testing**: See the [**tests**](./tests/) directory for unit tests, coverage reports, and testing documentation.
+
 ### 🌐 [Minimal API Sample](./samples/Dom.Mediator.Samples.MinimalApi/)
 A complete ASP.NET Core Minimal API implementation demonstrating:
 - **Task Management API** with CQRS pattern

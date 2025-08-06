@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dom.Mediator\Dom.Mediator.csproj" />
+    <ProjectReference Include="..\..\Dom.Mediator\Dom.Mediator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
