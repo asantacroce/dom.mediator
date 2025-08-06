@@ -1,0 +1,29 @@
+Summary
+  Generated on: 08/06/2025 - 14:53:08
+  Coverage date: 08/06/2025 - 14:53:06
+  Parser: MultiReport (2x Cobertura)
+  Assemblies: 1
+  Classes: 7
+  Files: 5
+  Line coverage: 66.3%
+  Covered lines: 81
+  Uncovered lines: 41
+  Coverable lines: 122
+  Total lines: 297
+  Branch coverage: 61.5% (32 of 52)
+  Covered branches: 32
+  Total branches: 52
+  Method coverage: 73.5% (25 of 34)
+  Full method coverage: 61.7% (21 of 34)
+  Covered methods: 25
+  Fully covered methods: 21
+  Total methods: 34
+
+Dom.Mediator                                  66.3%
+  Dom.Mediator.Implementation.Mediator        67.6%
+  Dom.Mediator.MediatorDependencyExtentions      0%
+  Dom.Mediator.Models.MediatorException       33.3%
+  Dom.Mediator.Result                         90.9%
+  Dom.Mediator.Result<T>                      92.3%
+  Error                                       81.8%
+  ErrorDetail                                    0%

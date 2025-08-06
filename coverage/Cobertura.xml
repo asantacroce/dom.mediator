@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage line-rate="0.6639344262295082" branch-rate="0.6153846153846154" lines-covered="81" lines-valid="122" branches-covered="32" branches-valid="52" complexity="63" version="0" timestamp="1754491988">
+  <sources>
+    <source>/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/</source>
+  </sources>
+  <packages>
+    <package name="Dom.Mediator" line-rate="0.6639344262295082" branch-rate="0.6153846153846154" complexity="63">
+      <classes>
+        <class name="Dom.Mediator.Implementation.Mediator" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/Mediator.cs" line-rate="0.676056338028169" branch-rate="0.6153846153846154" complexity="37">
+          <methods>
+            <method name="RegisterHandlers" signature="(System.Reflection.Assembly[])" line-rate="0.8333333333333334" branch-rate="0.7727272727272727" complexity="22">
+              <lines>
+                <line number="25" hits="24" branch="false" />
+                <line number="26" hits="240" branch="true" condition-coverage="50% (1/2)" />
+                <line number="27" hits="12" branch="false" />
+                <line number="29" hits="504" branch="true" condition-coverage="100% (2/2)" />
+                <line number="31" hits="936" branch="true" condition-coverage="100% (2/2)" />
+                <line number="33" hits="228" branch="true" condition-coverage="100% (2/2)" />
+                <line number="35" hits="120" branch="false" />
+                <line number="37" hits="120" branch="true" condition-coverage="100% (2/2)" />
+                <line number="39" hits="12" branch="false" />
+                <line number="41" hits="12" branch="true" condition-coverage="50% (1/2)" />
+                <line number="42" hits="0" branch="false" />
+                <line number="44" hits="12" branch="true" condition-coverage="50% (1/2)" />
+                <line number="45" hits="0" branch="false" />
+                <line number="47" hits="12" branch="false" />
+                <line number="49" hits="108" branch="true" condition-coverage="100% (4/4)" />
+                <line number="50" hits="108" branch="false" />
+                <line number="51" hits="108" branch="false" />
+                <line number="53" hits="24" branch="false" />
+                <line number="55" hits="24" branch="true" condition-coverage="50% (1/2)" />
+                <line number="56" hits="0" branch="false" />
+                <line number="58" hits="24" branch="true" condition-coverage="50% (1/2)" />
+                <line number="59" hits="0" branch="false" />
+                <line number="61" hits="24" branch="false" />
+                <line number="65" hits="12" branch="false" />
+              </lines>
+            </method>
+            <method name="AddRequestResponseBehaviour" signature="(System.Type)" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="69" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="70" hits="0" branch="false" />
+                <line number="72" hits="0" branch="false" />
+                <line number="73" hits="0" branch="false" />
+                <line number="74" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name="AddCommandBehaviour" signature="(System.Type)" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="78" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="79" hits="0" branch="false" />
+                <line number="81" hits="0" branch="false" />
+                <line number="82" hits="0" branch="false" />
+                <line number="83" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name="GetHandler" signature="(System.Type)" line-rate="1" branch-rate="1" complexity="4">
+              <lines>
+                <line number="140" hits="12" branch="true" condition-coverage="100% (2/2)" />
+                <line number="142" hits="2" branch="false" />
+                <line number="144" hits="10" branch="true" condition-coverage="100% (2/2)" />
+                <line number="146" hits="8" branch="false" />
+                <line number="149" hits="2" branch="false" />
+              </lines>
+            </method>
+            <method name="GetHandlerType" signature="(System.Object)" line-rate="0.8" branch-rate="0.5" complexity="2">
+              <lines>
+                <line number="154" hits="12" branch="false" />
+                <line number="155" hits="12" branch="false" />
+                <line number="157" hits="10" branch="true" condition-coverage="50% (1/2)" />
+                <line number="158" hits="0" branch="false" />
+                <line number="160" hits="10" branch="false" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.IServiceProvider)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="12" branch="false" />
+                <line number="12" hits="12" branch="false" />
+                <line number="13" hits="12" branch="false" />
+                <line number="14" hits="12" branch="false" />
+                <line number="17" hits="12" branch="false" />
+                <line number="19" hits="12" branch="false" />
+                <line number="20" hits="12" branch="false" />
+              </lines>
+            </method>
+            <method name="Send" signature="()" line-rate="0.6" branch-rate="0.5" complexity="2">
+              <lines>
+                <line number="114" hits="4" branch="false" />
+                <line number="115" hits="4" branch="false" />
+                <line number="117" hits="8" branch="true" condition-coverage="100% (4/4)" />
+                <line number="120" hits="8" branch="true" condition-coverage="50% (1/2)" />
+                <line number="122" hits="0" branch="false" />
+                <line number="125" hits="0" branch="false" />
+                <line number="127" hits="0" branch="false" />
+                <line number="128" hits="0" branch="true" condition-coverage="0% (0/4)" />
+                <line number="131" hits="4" branch="false" />
+                <line number="132" hits="4" branch="false" />
+              </lines>
+            </method>
+            <method name="Send" signature="()" line-rate="0.6" branch-rate="0.5" complexity="2">
+              <lines>
+                <line number="89" hits="8" branch="false" />
+                <line number="90" hits="6" branch="false" />
+                <line number="92" hits="12" branch="true" condition-coverage="100% (4/4)" />
+                <line number="95" hits="12" branch="true" condition-coverage="50% (1/2)" />
+                <line number="97" hits="0" branch="false" />
+                <line number="100" hits="0" branch="false" />
+                <line number="102" hits="0" branch="false" />
+                <line number="103" hits="0" branch="true" condition-coverage="0% (0/4)" />
+                <line number="106" hits="6" branch="false" />
+                <line number="107" hits="6" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="12" branch="false" />
+            <line number="12" hits="12" branch="false" />
+            <line number="13" hits="12" branch="false" />
+            <line number="14" hits="12" branch="false" />
+            <line number="17" hits="12" branch="false" />
+            <line number="19" hits="12" branch="false" />
+            <line number="20" hits="12" branch="false" />
+            <line number="25" hits="24" branch="false" />
+            <line number="26" hits="240" branch="true" condition-coverage="50% (1/2)" />
+            <line number="27" hits="12" branch="false" />
+            <line number="29" hits="504" branch="true" condition-coverage="100% (2/2)" />
+            <line number="31" hits="936" branch="true" condition-coverage="100% (2/2)" />
+            <line number="33" hits="228" branch="true" condition-coverage="100% (2/2)" />
+            <line number="35" hits="120" branch="false" />
+            <line number="37" hits="120" branch="true" condition-coverage="100% (2/2)" />
+            <line number="39" hits="12" branch="false" />
+            <line number="41" hits="12" branch="true" condition-coverage="50% (1/2)" />
+            <line number="42" hits="0" branch="false" />
+            <line number="44" hits="12" branch="true" condition-coverage="50% (1/2)" />
+            <line number="45" hits="0" branch="false" />
+            <line number="47" hits="12" branch="false" />
+            <line number="49" hits="108" branch="true" condition-coverage="100% (4/4)" />
+            <line number="50" hits="108" branch="false" />
+            <line number="51" hits="108" branch="false" />
+            <line number="53" hits="24" branch="false" />
+            <line number="55" hits="24" branch="true" condition-coverage="50% (1/2)" />
+            <line number="56" hits="0" branch="false" />
+            <line number="58" hits="24" branch="true" condition-coverage="50% (1/2)" />
+            <line number="59" hits="0" branch="false" />
+            <line number="61" hits="24" branch="false" />
+            <line number="65" hits="12" branch="false" />
+            <line number="69" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="70" hits="0" branch="false" />
+            <line number="72" hits="0" branch="false" />
+            <line number="73" hits="0" branch="false" />
+            <line number="74" hits="0" branch="false" />
+            <line number="78" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="79" hits="0" branch="false" />
+            <line number="81" hits="0" branch="false" />
+            <line number="82" hits="0" branch="false" />
+            <line number="83" hits="0" branch="false" />
+            <line number="89" hits="8" branch="false" />
+            <line number="90" hits="6" branch="false" />
+            <line number="92" hits="12" branch="true" condition-coverage="100% (4/4)" />
+            <line number="95" hits="12" branch="true" condition-coverage="50% (1/2)" />
+            <line number="97" hits="0" branch="false" />
+            <line number="100" hits="0" branch="false" />
+            <line number="102" hits="0" branch="false" />
+            <line number="103" hits="0" branch="true" condition-coverage="0% (0/4)" />
+            <line number="106" hits="6" branch="false" />
+            <line number="107" hits="6" branch="false" />
+            <line number="114" hits="4" branch="false" />
+            <line number="115" hits="4" branch="false" />
+            <line number="117" hits="8" branch="true" condition-coverage="100% (4/4)" />
+            <line number="120" hits="8" branch="true" condition-coverage="50% (1/2)" />
+            <line number="122" hits="0" branch="false" />
+            <line number="125" hits="0" branch="false" />
+            <line number="127" hits="0" branch="false" />
+            <line number="128" hits="0" branch="true" condition-coverage="0% (0/4)" />
+            <line number="131" hits="4" branch="false" />
+            <line number="132" hits="4" branch="false" />
+            <line number="140" hits="12" branch="true" condition-coverage="100% (2/2)" />
+            <line number="142" hits="2" branch="false" />
+            <line number="144" hits="10" branch="true" condition-coverage="100% (2/2)" />
+            <line number="146" hits="8" branch="false" />
+            <line number="149" hits="2" branch="false" />
+            <line number="154" hits="12" branch="false" />
+            <line number="155" hits="12" branch="false" />
+            <line number="157" hits="10" branch="true" condition-coverage="50% (1/2)" />
+            <line number="158" hits="0" branch="false" />
+            <line number="160" hits="10" branch="false" />
+          </lines>
+        </class>
+        <class name="Dom.Mediator.MediatorDependencyExtentions" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/DependencyInjection/MediatorDependencyExtentions.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="AddMediator" signature="(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action`1&lt;Dom.Mediator.Abstractions.IMediator&gt;)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="0" branch="false" />
+                <line number="12" hits="0" branch="false" />
+                <line number="13" hits="0" branch="false" />
+                <line number="14" hits="0" branch="false" />
+                <line number="15" hits="0" branch="false" />
+                <line number="16" hits="0" branch="false" />
+                <line number="17" hits="0" branch="false" />
+                <line number="18" hits="0" branch="false" />
+                <line number="20" hits="0" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="0" branch="false" />
+            <line number="12" hits="0" branch="false" />
+            <line number="13" hits="0" branch="false" />
+            <line number="14" hits="0" branch="false" />
+            <line number="15" hits="0" branch="false" />
+            <line number="16" hits="0" branch="false" />
+            <line number="17" hits="0" branch="false" />
+            <line number="18" hits="0" branch="false" />
+            <line number="20" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="Dom.Mediator.Models.MediatorException" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/Models/MediatorException.cs" line-rate="0.3333333333333333" branch-rate="1" complexity="3">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="6" hits="0" branch="false" />
+                <line number="8" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="10" hits="2" branch="false" />
+                <line number="12" hits="2" branch="false" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.String,System.Exception)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="0" branch="false" />
+                <line number="16" hits="0" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="6" hits="0" branch="false" />
+            <line number="8" hits="0" branch="false" />
+            <line number="10" hits="2" branch="false" />
+            <line number="12" hits="2" branch="false" />
+            <line number="14" hits="0" branch="false" />
+            <line number="16" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="Dom.Mediator.Result" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/Models/Result.cs" line-rate="0.9090909090909091" branch-rate="1" complexity="7">
+          <methods>
+            <method name="get_IsSuccess" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="43" hits="12" branch="false" />
+              </lines>
+            </method>
+            <method name="get_Error" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="44" hits="14" branch="false" />
+              </lines>
+            </method>
+            <method name="get_IsFailure" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="45" hits="6" branch="false" />
+              </lines>
+            </method>
+            <method name="Success" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="53" hits="4" branch="false" />
+              </lines>
+            </method>
+            <method name="Failure" signature="(System.String,System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="60" hits="4" branch="false" />
+                <line number="61" hits="4" branch="false" />
+              </lines>
+            </method>
+            <method name="Failure" signature="(Error)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="66" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.Boolean,Error)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="47" hits="8" branch="false" />
+                <line number="49" hits="8" branch="false" />
+                <line number="50" hits="8" branch="false" />
+                <line number="51" hits="8" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="43" hits="12" branch="false" />
+            <line number="44" hits="14" branch="false" />
+            <line number="45" hits="6" branch="false" />
+            <line number="47" hits="8" branch="false" />
+            <line number="49" hits="8" branch="false" />
+            <line number="50" hits="8" branch="false" />
+            <line number="51" hits="8" branch="false" />
+            <line number="53" hits="4" branch="false" />
+            <line number="60" hits="4" branch="false" />
+            <line number="61" hits="4" branch="false" />
+            <line number="66" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="Dom.Mediator.Result`1" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/Models/Result.cs" line-rate="0.9230769230769231" branch-rate="1" complexity="8">
+          <methods>
+            <method name="get_IsSuccess" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="5" hits="14" branch="false" />
+              </lines>
+            </method>
+            <method name="get_Error" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="6" hits="16" branch="false" />
+              </lines>
+            </method>
+            <method name="get_Value" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="8" branch="false" />
+              </lines>
+            </method>
+            <method name="get_IsFailure" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="10" hits="6" branch="false" />
+              </lines>
+            </method>
+            <method name="Success" signature="(T)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="6" branch="false" />
+              </lines>
+            </method>
+            <method name="Failure" signature="(System.String,System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="26" hits="4" branch="false" />
+                <line number="28" hits="4" branch="false" />
+              </lines>
+            </method>
+            <method name="Failure" signature="(Error)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="34" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.Boolean,T,Error)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="10" branch="false" />
+                <line number="14" hits="10" branch="false" />
+                <line number="15" hits="10" branch="false" />
+                <line number="16" hits="10" branch="false" />
+                <line number="17" hits="10" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="5" hits="14" branch="false" />
+            <line number="6" hits="16" branch="false" />
+            <line number="8" hits="8" branch="false" />
+            <line number="10" hits="6" branch="false" />
+            <line number="12" hits="10" branch="false" />
+            <line number="14" hits="10" branch="false" />
+            <line number="15" hits="10" branch="false" />
+            <line number="16" hits="10" branch="false" />
+            <line number="17" hits="10" branch="false" />
+            <line number="19" hits="6" branch="false" />
+            <line number="26" hits="4" branch="false" />
+            <line number="28" hits="4" branch="false" />
+            <line number="34" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="Error" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/Models/Error.cs" line-rate="0.8181818181818182" branch-rate="1" complexity="6">
+          <methods>
+            <method name="get_Code" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="30" branch="false" />
+              </lines>
+            </method>
+            <method name="get_Description" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="30" branch="false" />
+              </lines>
+            </method>
+            <method name="get_Details" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="10" branch="false" />
+              </lines>
+            </method>
+            <method name="get_Type" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="18" branch="false" />
+              </lines>
+            </method>
+            <method name="AddDetail" signature="(System.String,System.String)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="23" hits="0" branch="false" />
+                <line number="24" hits="0" branch="false" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.String,System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="10" branch="false" />
+                <line number="16" hits="10" branch="false" />
+                <line number="17" hits="10" branch="false" />
+                <line number="18" hits="10" branch="false" />
+                <line number="19" hits="10" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="8" hits="30" branch="false" />
+            <line number="9" hits="30" branch="false" />
+            <line number="11" hits="10" branch="false" />
+            <line number="12" hits="18" branch="false" />
+            <line number="14" hits="10" branch="false" />
+            <line number="16" hits="10" branch="false" />
+            <line number="17" hits="10" branch="false" />
+            <line number="18" hits="10" branch="false" />
+            <line number="19" hits="10" branch="false" />
+            <line number="23" hits="0" branch="false" />
+            <line number="24" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="ErrorDetail" filename="/home/runner/work/dom.mediator/dom.mediator/Dom.Mediator/Models/Error.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_field" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="4" hits="0" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="4" hits="0" branch="false" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
