@@ -3,12 +3,12 @@
 
 # Dom.Mediator
 
-**Dom.Mediator** is a clean, minimal, zero-dependency implementation of the Mediator pattern for .NET, focused on:
+**Dom.Mediator** is a clean, minimal implementation of the Mediator pattern for .NET, focused on:
 
 - ✅ Request/Response messaging (CQRS)
 - ✅ Composable pipeline behaviors (validation, logging, etc.)
 - ✅ Built-in Result Pattern handling with typed errors
-- ✅ No external dependencies — just C#
+- ✅ Lightweight with minimal dependencies
 - ✅ Perfect fit for Minimal APIs or Clean Architecture
 
 ## 📦 Install via NuGet
@@ -19,62 +19,100 @@ dotnet add package Dom.Mediator
 
 ## 🚀 Quick Example
 
-Define your command:
+### Commands (Actions without return values)
 
+Define your command:
 ```csharp
-public class EchoCommand : IRequest<string>
-{
-    public string Message { get; set; } = string.Empty;
-}
+public record CreateTaskCommand(string Title, string? Description) : ICommand;
 ```
 
 Create a handler:
-
 ```csharp
-public class EchoHandler : IRequestHandler<EchoCommand, string>
+public class CreateTaskHandler : ICommandHandler<CreateTaskCommand>
 {
-    public Task<Result<string>> Handle(EchoCommand request, CancellationToken cancellationToken)
+    public Task<Result> Handle(CreateTaskCommand command, CancellationToken cancellationToken)
     {
-        return Task.FromResult(Result<string>.Success($"Echo: {request.Message}"));
+        // Perform action logic here
+        return Task.FromResult(Result.Success());
     }
 }
 ```
 
-Register and send:
+### Queries (Read operations with return values)
+
+Define your query:
+```csharp
+public record GetTasksQuery() : IQuery<List<TaskItem>>;
+```
+
+Create a handler:
+```csharp
+public class GetTasksHandler : IQueryHandler<GetTasksQuery, List<TaskItem>>
+{
+    public Task<Result<List<TaskItem>>> Handle(GetTasksQuery query, CancellationToken cancellationToken)
+    {
+        var tasks = GetTasksFromStore(); // Your logic here
+        return Task.FromResult(Result<List<TaskItem>>.Success(tasks));
+    }
+}
+```
+
+### Setup with Dependency Injection
 
 ```csharp
-var mediator = new Dom.Mediator.PureMediator();
-mediator.ScanHandlersFrom(Assembly.GetExecutingAssembly());
-
-var result = await mediator.Send(new EchoCommand { Message = "Hello" });
-
-return result.Match(
-    value => Results.Ok(value),
-    error => Results.Problem(error)
+builder.Services.AddMediator(config =>
+{
+    config.RegisterHandlers(typeof(Program).Assembly);
+    
+    // Add pipeline behaviors
+    config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
+    config.AddCommandBehaviour(typeof(ValidationBehaviour<>));
+});
 );
 ```
 
 ## ⚙️ Built-in Features
 
-- 🧱 Pipeline Behaviors: Add logging, validation, error handling in a clean chain.
-- 🎯 Result Pattern (Result<T> and Result): Native success/failure with structured error codes.
-- 🧪 FluentValidation Support: Easily add a validation behavior.
-- 🔄 Auto-Handler Discovery: Reflective scanning via assembly input.
-- 💡 Custom Behaviors: Plug in your own pre-/post-handling logic.
+- 🧱 **Pipeline Behaviors**: Add logging, validation, error handling in a clean chain
+- 🎯 **Result Pattern**: Native success/failure with structured error codes (`Result<T>` and `Result`)
+- 🔄 **Auto-Handler Discovery**: Reflective scanning via assembly registration
+- 💡 **CQRS Support**: Separate Command and Query handling with distinct interfaces
+- 🏗️ **Dependency Injection**: Built-in support for Microsoft DI container
 
-## 🧩 Extensibility
+## 🧩 Pipeline Behaviors
+
+Add behaviors to intercept and process requests:
 
 ```csharp
-mediator.RegisterGlobalPipelineBehavior(typeof(MyCustomBehavior<,>));
+// For queries (request/response)
+config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
+
+// For commands
+config.AddCommandBehaviour(typeof(ValidationBehaviour<>));
 ```
 
-Each behavior implements:
-
+### Request/Response Behavior Interface:
 ```csharp
-Task<Result<TResponse>> Handle(
-    TRequest request,
-    CancellationToken cancellationToken,
-    RequestHandlerDelegate<TResponse> next);
+public interface IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
+{
+    Task<Result<TResponse>> Handle(
+        TRequest request, 
+        CancellationToken cancellationToken, 
+        RequestHandlerDelegate<TResponse> next);
+}
+```
+
+### Command Behavior Interface:
+```csharp
+public interface IPipelineBehavior<TCommand>
+    where TCommand : ICommand
+{
+    Task<Result> Handle(
+        TCommand command, 
+        CancellationToken cancellationToken, 
+        CommandHandlerDelegate next);
+}
 ```
 
 ## 📜 License
