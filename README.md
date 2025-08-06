@@ -68,7 +68,23 @@ builder.Services.AddMediator(config =>
     config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
     config.AddCommandBehaviour(typeof(ValidationBehaviour<>));
 });
-);
+```
+
+## 📚 Samples & Examples
+
+Check out the [**samples**](./samples/) directory for complete working examples:
+
+### 🌐 [Minimal API Sample](./samples/Dom.Mediator.Samples.MinimalApi/)
+A complete ASP.NET Core Minimal API implementation demonstrating:
+- **Task Management API** with CQRS pattern
+- **Command & Query handlers** with validation
+- **Pipeline behaviors** for logging and cross-cutting concerns
+- **Result pattern** integration with HTTP responses
+- **Swagger documentation** and endpoint configuration
+
+```bash
+cd samples/Dom.Mediator.Samples.MinimalApi
+dotnet run
 ```
 
 ## ⚙️ Built-in Features
