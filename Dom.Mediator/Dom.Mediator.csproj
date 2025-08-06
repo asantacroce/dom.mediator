@@ -25,7 +25,7 @@
 	<Nullable>enable</Nullable>
 
 	<PackageId>Dom.Mediator</PackageId>
-	<Version>1.0.0-preview.9</Version>
+	<Version>1.0.0-preview.10</Version>
 	<Authors>André Dominic Santacroce</Authors>
 	<Company>André Dominic Santacroce - https://www.andresantacroce.com</Company>
 	<Description>Lightweight mediator pattern with behavior pipeline and Result Pattern support.</Description>
