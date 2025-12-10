@@ -70,13 +70,15 @@ builder.Services.AddMediator(config =>
 });
 ```
 
-## 📚 Samples & Examples
+## 📚 Samples & Tests
 
-Check out the [**samples**](./samples/) directory for complete working examples:
+Check out the [**samples**](https://github.com/asantacroce/dom.mediator/tree/main/samples) directory for complete working examples:
 
-> 🧪 **Testing**: See the [**tests**](./tests/) directory for unit tests, coverage reports, and testing documentation.
+> 🧪 **Testing**: See the [**tests**](https://github.com/asantacroce/dom.mediator/tree/main/tests) directory for unit tests, coverage reports, and testing documentation.
 
-### 🌐 [Minimal API Sample](./samples/Dom.Mediator.Samples.MinimalApi/)
+> 📊 **Coverage**: Here also the [**coverage report**](https://mediator.andresantacroce.com/coverage/) related to the latest version.
+
+### 🌐 [Minimal API Sample](https://github.com/asantacroce/dom.mediator/tree/main/samples/Dom.Mediator.Samples.MinimalApi)
 A complete ASP.NET Core Minimal API implementation demonstrating:
 - **Task Management API** with CQRS pattern
 - **Command & Query handlers** with validation
