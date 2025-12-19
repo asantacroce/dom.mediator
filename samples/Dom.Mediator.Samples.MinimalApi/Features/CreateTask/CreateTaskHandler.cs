@@ -1,47 +1,48 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
 
-public class CreateTaskHandler : ICommandHandler<CreateTaskCommand>
+public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
     private readonly TaskStore _store;
 
     public CreateTaskHandler(TaskStore store) => _store = store;
 
-    public Task<Result> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public Task<Result<string>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        if(Validate(request) is Error error)
+        var validation = Validate(request);
+
+        if (validation.Count > 0)
         {
-            return Task.FromResult(Result.Failure(error));
+            Error error = new Error("CREATE_001", "Invalid fields upon creation", "validation");
+            error.AddDetails(validation);
+
+            return Task.FromResult(Result<string>.Failure(error));
         }
 
         var task = new TaskItem
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             Title = request.Title,
             Description = request.Description,
             DueDate = request.DueDate,
             CreatedAt = DateTime.UtcNow,
-            IsCompleted = false
+            Status = Status.Created
         };
 
         _store.Tasks.Add(task);
-        return Task.FromResult(Result.Success());
+        return Task.FromResult(Result<string>.Success(task.Id));
     }
 
-    public Error Validate(CreateTaskCommand request)
+    public List<ErrorDetail> Validate(CreateTaskCommand request)
     {
-        Error error = new Error("CREATE_001", "Invalid fields upon creation", "validation");
+        List<ErrorDetail> errors = [];
 
         if (string.IsNullOrWhiteSpace(request.Title))
-            error.AddDetail("title", "Title is required.");
+            errors.Add(new ("title", "Title is required."));
 
         if (request.DueDate.HasValue && request.DueDate.Value < DateTime.UtcNow)
-            error.AddDetail("dueDate", "Due date cannot be in the past.");
+            errors.Add(new ("dueDate", "Due date cannot be in the past."));
 
-        if (error.Details.Count > 0)
-            {
-            return error;
-        }
-        return null;
+        return errors;
     }
 }
