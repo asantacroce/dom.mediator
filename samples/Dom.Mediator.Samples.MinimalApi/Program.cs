@@ -1,11 +1,18 @@
 using Dom.Mediator;
 using Dom.Mediator.Samples.MinimalApi.Infrastructure.Behaviours;
 using Dom.Mediator.Samples.MinimalApi.Infrastructure.Endpoints;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure JSON serialization to support string-based enums
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddMediator(config =>
 {
