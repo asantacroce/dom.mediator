@@ -218,8 +218,8 @@ var assemblies = [
       { "name": "Dom.Mediator.Models.MediatorException", "rp": "Dom.Mediator_MediatorException.html", "cl": 2, "ucl": 4, "cal": 6, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Dom.Mediator.Result", "rp": "Dom.Mediator_Result.html", "cl": 10, "ucl": 1, "cal": 11, "tl": 68, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Dom.Mediator.Result<T>", "rp": "Dom.Mediator_Result_1.html", "cl": 12, "ucl": 1, "cal": 13, "tl": 68, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Error", "rp": "Dom.Mediator_Error.html", "cl": 9, "ucl": 2, "cal": 11, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ErrorDetail", "rp": "Dom.Mediator_ErrorDetail.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Error", "rp": "Dom.Mediator_Error.html", "cl": 9, "ucl": 4, "cal": 13, "tl": 27, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ErrorDetail", "rp": "Dom.Mediator_ErrorDetail.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 27, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
