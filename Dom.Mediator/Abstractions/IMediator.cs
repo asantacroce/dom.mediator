@@ -10,18 +10,6 @@ public interface IMediator
     void RegisterHandlers(params Assembly[] assemblies);
 
     /// <summary>
-    /// Adds a behavior to the request/response pipeline
-    /// </summary>
-    /// <param name="behaviorType">The generic behavior type to add</param>
-    void AddRequestResponseBehaviour(Type behaviorType);
-    
-    /// <summary>
-    /// Adds a behavior to the command pipeline
-    /// </summary>
-    /// <param name="behaviorType">The generic behavior type to add</param>
-    void AddCommandBehaviour(Type behaviorType);
-
-    /// <summary>
     /// Sends a request to a single handler
     /// </summary>
     /// <typeparam name="TResponse">Response type</typeparam>
@@ -37,4 +25,10 @@ public interface IMediator
     /// <param name="cancellationToken">Optional cancellation token</param>
     /// <returns>Result indicating success or failure</returns>
     Task<Result> Send(ICommand command, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds a behavior to the pipeline. The behavior can have 1 or 2 generic parameters.
+    /// </summary>
+    /// <param name="behaviourType">The generic behavior type to add</param>
+    void AddBehaviour(Type behaviourType);
 }

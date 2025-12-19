@@ -13,8 +13,8 @@ builder.Services.AddMediator(config =>
     config.RegisterHandlers(typeof(Program).Assembly);
 
     // Register the request/response behaviours
-    config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
-    config.AddCommandBehaviour(typeof(LoggingCommandBehaviour<>));
+    config.AddBehaviour(typeof(LoggingBehaviour<,>));  // For queries/requests
+    config.AddBehaviour(typeof(LoggingBehaviour<>));   // For commands
 });
 
 builder.Services.AddSingleton<TaskStore>();

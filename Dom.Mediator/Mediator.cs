@@ -8,11 +8,14 @@ namespace Dom.Mediator.Implementation;
 
 public class Mediator : IMediator
 {
+    private const int BEHAVIOUR_COMMAND_ARGS = 1;
+    private const int BEHAVIOUR_QUERY_ARGS = 2;
+
     private readonly Dictionary<Type, Type> _queryHandler = new();
     private readonly Dictionary<Type, Type> _commandHandler = new();
-    private readonly List<Type> _requestResponseBehaviours = new();
-    private readonly List<Type> _commandBehaviours = new();
     private readonly IServiceProvider _serviceProvider;
+
+    private readonly List<Type> _behaviours = new();
 
     public Mediator(IServiceProvider serviceProvider)
     {
@@ -64,23 +67,15 @@ public class Mediator : IMediator
         }
     }
 
-    public void AddRequestResponseBehaviour(Type behaviourType)
+    public void AddBehaviour(Type behaviourType)
     {
         if (!behaviourType.IsGenericType)
             throw new ArgumentException("Behaviour type must be generic", nameof(behaviourType));
 
         var genericTypeDefinition = behaviourType.GetGenericTypeDefinition();
-        _requestResponseBehaviours.Add(genericTypeDefinition);
+        _behaviours.Add(genericTypeDefinition);
     }
 
-    public void AddCommandBehaviour(Type behaviourType)
-    {
-        if (!behaviourType.IsGenericType)
-            throw new ArgumentException("Behaviour type must be generic", nameof(behaviourType));
-
-        var genericTypeDefinition = behaviourType.GetGenericTypeDefinition();
-        _commandBehaviours.Add(genericTypeDefinition);
-    }
     #endregion
 
     #region MEDIATOR METHODS
@@ -92,15 +87,19 @@ public class Mediator : IMediator
         RequestHandlerDelegate<TResponse> next = () => handlerRes.Item2.Handle((dynamic)request, cancellationToken);
 
         // Apply behaviors in reverse order (so the first registered behavior is the outermost)
-        foreach (var behaviourType in _requestResponseBehaviours.AsEnumerable().Reverse())
+        foreach (var behaviourType in _behaviours.AsEnumerable().Reverse())
         {
-            var concreteBehaviourType = behaviourType.MakeGenericType(requestType, typeof(TResponse));
+            // Check if this behavior has the right arity (2 type parameters)
+            if (behaviourType.GetGenericArguments().Length == BEHAVIOUR_QUERY_ARGS)
+            {
+                var concreteBehaviourType = behaviourType.MakeGenericType(requestType, typeof(TResponse));
 
-            // Create behavior instance using service provider
-            object? behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
+                object? behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
 
-            var currentNext = next;
-            next = () => ((dynamic)behaviour).Handle((dynamic)request, cancellationToken, currentNext);
+                var currentNext = next;
+                next = () => ((dynamic)behaviour).Handle((dynamic)request, cancellationToken, currentNext);
+            }
+            // Skip behaviors with different arity
         }
 
         return await next();
@@ -117,15 +116,19 @@ public class Mediator : IMediator
         CommandHandlerDelegate next = () => handlerRes.Item2.Handle((dynamic)command, cancellationToken);
 
         // Apply behaviors in reverse order (so the first registered behavior is the outermost)
-        foreach (var behaviourType in _commandBehaviours.AsEnumerable().Reverse())
+        foreach (var behaviourType in _behaviours.AsEnumerable().Reverse())
         {
-            var concreteBehaviourType = behaviourType.MakeGenericType(commandType);
+            // Check if this behavior has the right arity (1 type parameter)
+            if (behaviourType.GetGenericArguments().Length == BEHAVIOUR_COMMAND_ARGS)
+            {
+                var concreteBehaviourType = behaviourType.MakeGenericType(commandType);
 
-            // Create behavior instance using service provider if available
-            object? behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
+                object? behaviour = ActivatorUtilities.CreateInstance(_serviceProvider, concreteBehaviourType);
 
-            var currentNext = next;
-            next = () => ((dynamic)behaviour).Handle((dynamic)command, cancellationToken, currentNext);
+                var currentNext = next;
+                next = () => ((dynamic)behaviour).Handle((dynamic)command, cancellationToken, currentNext);
+            }
+            // Skip behaviors with different arity
         }
 
         return await next();
@@ -133,7 +136,6 @@ public class Mediator : IMediator
     #endregion
 
     #region PRIVATE
-
 
     private dynamic GetHandler(Type requestType)
     {
