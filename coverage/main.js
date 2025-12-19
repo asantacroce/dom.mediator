@@ -213,7 +213,7 @@ var assemblies = [
   {
     "name": "Dom.Mediator",
     "classes": [
-      { "name": "Dom.Mediator.Implementation.Mediator", "rp": "Dom.Mediator_Mediator.html", "cl": 48, "ucl": 23, "cal": 71, "tl": 165, "cb": 32, "tb": 52, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Dom.Mediator.Implementation.Mediator", "rp": "Dom.Mediator_Mediator.html", "cl": 47, "ucl": 20, "cal": 67, "tl": 167, "cb": 34, "tb": 54, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Dom.Mediator.MediatorDependencyExtentions", "rp": "Dom.Mediator_MediatorDependencyExtentions.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Dom.Mediator.Models.MediatorException", "rp": "Dom.Mediator_MediatorException.html", "cl": 2, "ucl": 4, "cal": 6, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Dom.Mediator.Result", "rp": "Dom.Mediator_Result.html", "cl": 10, "ucl": 1, "cal": 11, "tl": 68, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -234,7 +234,7 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "Dom.Mediator", "class": "Dom.Mediator.Implementation.Mediator", "reportPath": "Dom.Mediator_Mediator.html", "methodName": "RegisterHandlers(System.Reflection.Assembly[])", "methodShortName": "RegisterHandlers(...)", "fileIndex": 0, "line": 25,
+    "assembly": "Dom.Mediator", "class": "Dom.Mediator.Implementation.Mediator", "reportPath": "Dom.Mediator_Mediator.html", "methodName": "RegisterHandlers(System.Reflection.Assembly[])", "methodShortName": "RegisterHandlers(...)", "fileIndex": 0, "line": 28,
     "metrics": [
       { "value": 24, "exceeded": false },
       { "value": 22, "exceeded": true },
