@@ -1,5 +1,6 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
+using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
@@ -19,17 +20,17 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
             return Task.FromResult(Result<string>.Failure(error));
         }
 
-        var task = new TaskItem
+        var createTask = TaskItem.Create(request.Title, request.Description, request.DueDate);
+
+        if(createTask.IsFailure)
         {
-            Id = Guid.NewGuid().ToString(),
-            Title = request.Title,
-            Description = request.Description,
-            DueDate = request.DueDate,
-            CreatedAt = DateTime.UtcNow,
-            Status = Status.Created
-        };
+            return Task.FromResult(Result<string>.Failure(createTask.Error!));
+        }
+
+        var task = createTask.Value!;
 
         _store.Tasks.Add(task);
+
         return Task.FromResult(Result<string>.Success(task.Id));
     }
 
@@ -40,8 +41,8 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
         if (string.IsNullOrWhiteSpace(request.Title))
             errors.Add(new ("title", "Title is required."));
 
-        if (request.DueDate.HasValue && request.DueDate.Value < DateTime.UtcNow)
-            errors.Add(new ("dueDate", "Due date cannot be in the past."));
+        if (string.IsNullOrWhiteSpace(request.Description))
+            errors.Add(new("description", "Description is required."));
 
         return errors;
     }

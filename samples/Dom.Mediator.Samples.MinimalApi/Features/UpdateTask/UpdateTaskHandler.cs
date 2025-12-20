@@ -1,5 +1,6 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
+using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class UpdateTaskHandler : ICommandHandler<UpdateTaskCommand>
 {
