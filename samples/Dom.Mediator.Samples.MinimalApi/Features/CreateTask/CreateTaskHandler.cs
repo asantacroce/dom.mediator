@@ -14,7 +14,7 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 
         if (validation.Count > 0)
         {
-            Error error = new Error("CREATE_TASK", "Invalid fields upon creation", "validation");
+            Error error = new Error(TaskItem.ErrorCodes.CREATE_TASK, "Invalid fields upon creation", TaskItem.ErrorTypes.VALIDATION);
             error.AddDetails(validation);
 
             return Result<string>.Failure(error);
@@ -36,13 +36,13 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 
     public List<ErrorDetail> Validate(CreateTaskCommand request)
     {
-        List<ErrorDetail> errors = [];
+        List<ErrorDetail> errors = new();
 
         if (string.IsNullOrWhiteSpace(request.Title))
-            errors.Add(new ("title", "Title is required."));
+            errors.Add(new ErrorDetail("title", "Title is required."));
 
         if (string.IsNullOrWhiteSpace(request.Description))
-            errors.Add(new("description", "Description is required."));
+            errors.Add(new ErrorDetail("description", "Description is required."));
 
         return errors;
     }

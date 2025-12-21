@@ -1,5 +1,6 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
+using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class UpdateTaskHandler : ICommandHandler<UpdateTaskCommand>
 {
@@ -13,7 +14,7 @@ public class UpdateTaskHandler : ICommandHandler<UpdateTaskCommand>
 
         if (task is null)
         {
-            Error error = new Error("UPDATE_TASK_", "Task not found", "not_found");
+            Error error = new Error(TaskItem.ErrorCodes.UPDATE_TASK_NOT_FOUND, "Task not found", TaskItem.ErrorTypes.NOT_FOUND);
             return Result.Failure(error);
         }
 
@@ -25,7 +26,7 @@ public class UpdateTaskHandler : ICommandHandler<UpdateTaskCommand>
         {
             if (string.IsNullOrEmpty(request.Comment))
             {
-                Error error = new Error("UPDATE_002", "Comment not provided", "invalid_operation");
+                Error error = new Error(TaskItem.ErrorCodes.UPDATE_COMMENT_REQUIRED, "Comment not provided", TaskItem.ErrorTypes.INVALID_OPERATION);
                 return Result.Failure(error); 
             }
 
