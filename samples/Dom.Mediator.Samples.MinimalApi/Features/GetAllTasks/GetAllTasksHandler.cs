@@ -4,9 +4,9 @@ using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class GetAllTasksHandler : IQueryHandler<GetAllTasksQuery, List<TaskItem>>
 {
-    private readonly TaskStore _store;
+    private readonly TaskRepository _store;
 
-    public GetAllTasksHandler(TaskStore store) => _store = store;
+    public GetAllTasksHandler(TaskRepository store) => _store = store;
 
     public Task<Result<List<TaskItem>>> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
     {

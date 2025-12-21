@@ -24,7 +24,7 @@ builder.Services.AddMediator(config =>
     config.AddBehaviour(typeof(LoggingBehaviour<>));   // For commands
 });
 
-builder.Services.AddSingleton<TaskStore>();
+builder.Services.AddSingleton<TaskRepository>();
 
 var app = builder.Build();
 

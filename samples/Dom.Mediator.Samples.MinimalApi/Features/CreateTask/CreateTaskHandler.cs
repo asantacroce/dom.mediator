@@ -4,34 +4,34 @@ using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
-    private readonly TaskStore _store;
+    private readonly TaskRepository _taskRepostiroy;
 
-    public CreateTaskHandler(TaskStore store) => _store = store;
+    public CreateTaskHandler(TaskRepository taskRepository) => _taskRepostiroy = taskRepository;
 
-    public Task<Result<string>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
         var validation = Validate(request);
 
         if (validation.Count > 0)
         {
-            Error error = new Error("CREATE_001", "Invalid fields upon creation", "validation");
+            Error error = new Error("CREATE_TASK", "Invalid fields upon creation", "validation");
             error.AddDetails(validation);
 
-            return Task.FromResult(Result<string>.Failure(error));
+            return Result<string>.Failure(error);
         }
 
         var createTask = TaskItem.Create(request.Title, request.Description, request.DueDate);
 
         if(createTask.IsFailure)
         {
-            return Task.FromResult(Result<string>.Failure(createTask.Error!));
+            return Result<string>.Failure(createTask.Error!);
         }
 
         var task = createTask.Value!;
 
-        _store.Tasks.Add(task);
+        _taskRepostiroy.Tasks.Add(task);
 
-        return Task.FromResult(Result<string>.Success(task.Id));
+        return Result<string>.Success(task.Id);
     }
 
     public List<ErrorDetail> Validate(CreateTaskCommand request)
