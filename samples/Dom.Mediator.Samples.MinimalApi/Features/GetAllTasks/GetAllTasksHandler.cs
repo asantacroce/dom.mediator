@@ -1,6 +1,5 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
-using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class GetAllTasksHandler : IQueryHandler<GetAllTasksQuery, List<TaskItem>>
 {

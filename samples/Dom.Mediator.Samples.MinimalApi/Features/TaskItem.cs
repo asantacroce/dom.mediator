@@ -1,7 +1,4 @@
-﻿using Dom.Mediator.Abstractions;
-using System.Threading.Tasks;
-
-namespace Dom.Mediator.Samples.MinimalApi.Features;
+﻿using Dom.Mediator;
 
 public enum Status
 {
@@ -13,9 +10,10 @@ public enum Status
 
 public record Comment(string Text, DateTime CreatedAt);
 
+public record StatusUpdate(Status status, DateTime Timestamp);
+
 public class TaskItem
 {
-    // Centralized error-code and type constants (UPPERCASE_SEPARATED_BY_UNDERSCORE)
     public static class ErrorCodes
     {
         public const string CREATE_001 = "CREATE_001";
@@ -25,8 +23,9 @@ public class TaskItem
         public const string UPDATE_002 = "UPDATE_002";
         public const string UPDATE_003 = "UPDATE_003";
         public const string UPDATE_004 = "UPDATE_004";
+        public const string UPDATE_005 = "UPDATE_005";
+        public const string UPDATE_006 = "UPDATE_006";
 
-        // Additional codes used by handlers
         public const string UPDATE_TASK_NOT_FOUND = "UPDATE_TASK_NOT_FOUND";
         public const string UPDATE_COMMENT_REQUIRED = "UPDATE_COMMENT_REQUIRED";
     }
@@ -42,15 +41,16 @@ public class TaskItem
     public required string Title { get; set; }
     public required string Description { get; set; }
     public DateTime? DueDate { get; private set; }
-    public Status Status { get; private set; }
+    public Status CurrentStatus { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public List<Comment> Comments { get; } = new();
+    public List<StatusUpdate> StatusHistory { get; } = new();
 
     public static Result<TaskItem> Create(string title, string description, DateTime? dueDate)
     {
         if (dueDate.HasValue)
         {
-            if (DateTime.UtcNow.Subtract(dueDate.Value).TotalHours < 0)
+            if (DateTime.UtcNow.Subtract(dueDate.Value).TotalHours > 0)
             {
                 return Result<TaskItem>.Failure(ErrorCodes.CREATE_001, "Due date must be in the future.", ErrorTypes.INVALID_OPERATION);
             }
@@ -63,8 +63,11 @@ public class TaskItem
             Description = description,
             DueDate = dueDate,
             CreatedAt = DateTime.UtcNow,
-            Status = Status.Created
+            CurrentStatus = Status.Created,
         };
+
+
+        task.TrackStatus(task.CurrentStatus);
 
         return Result<TaskItem>.Success(task);
     }
@@ -78,38 +81,66 @@ public class TaskItem
     {
         if (string.IsNullOrEmpty(comment))
         {
-            return Result.Failure(new Error(
+            return BuildFailure(
                 ErrorCodes.UPDATE_001,
-                "A comment is required when updating the task status",
-                ErrorTypes.VALIDATION));
+                "A comment is required when updating the task status");
         }
 
-        if (this.Status == Status.Created)
+        if (newStatus == Status.Created)
         {
-            return Result.Failure(new Error(
+            return BuildFailure(
                 ErrorCodes.UPDATE_002,
-                "Cannot set status to Created",
-                ErrorTypes.INVALID_OPERATION));
+                "Cannot set status to Created");
         }
 
-        if (this.Status == Status.Completed)
+        if (newStatus == CurrentStatus)
         {
-            return Result.Failure(new Error(
+            return BuildFailure(
                 ErrorCodes.UPDATE_003,
-                "Completed tasks cannot be updated",
-                ErrorTypes.INVALID_OPERATION));
+                $"Current status is already {CurrentStatus}, remove status from the update if no transition is required"
+                );
         }
 
-        if (this.Status == Status.InProgress && newStatus == Status.Completed)
+        if (this.CurrentStatus == Status.Completed)
         {
-            return Result.Failure(new Error(
+            return BuildFailure(
                 ErrorCodes.UPDATE_004,
-                "Task status cannot be moved directly from InProgress to Completed without being first Tested",
-                ErrorTypes.INVALID_OPERATION));
+                "Completed tasks cannot be updated");
         }
 
-        Status = newStatus;
+        if (this.CurrentStatus == Status.Created && newStatus == Status.ReadyToTest)
+        {
+            return BuildFailure(
+                ErrorCodes.UPDATE_005,
+                $"Task should first transition to {Status.InProgress} before moving to testing stage");
+        }
+
+        if (NotTested() && newStatus == Status.Completed)
+        {
+            return BuildFailure(
+                ErrorCodes.UPDATE_006,
+                $"Task cannot be completed without being first tested");
+        }
+
+        //If all rules are respected with then update the status
+        CurrentStatus = newStatus;
+        TrackStatus(CurrentStatus);
 
         return Result.Success();
     }
+
+    private void TrackStatus(Status newStatus)
+    {
+        this.StatusHistory.Add(new StatusUpdate(newStatus, DateTime.UtcNow));
+    }
+
+    private Result BuildFailure(string errorCode, string errorMessage)
+    {
+        return Result.Failure(new Error(
+                errorCode,
+                errorMessage,
+                ErrorTypes.INVALID_OPERATION));
+    }
+
+    private bool NotTested() => (CurrentStatus == Status.Created || CurrentStatus == Status.InProgress);
 }

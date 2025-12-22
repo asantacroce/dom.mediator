@@ -1,6 +1,5 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
-using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class UpdateTaskHandler : ICommandHandler<UpdateTaskCommand>
 {
@@ -14,24 +13,28 @@ public class UpdateTaskHandler : ICommandHandler<UpdateTaskCommand>
 
         if (task is null)
         {
-            Error error = new Error(TaskItem.ErrorCodes.UPDATE_TASK_NOT_FOUND, "Task not found", TaskItem.ErrorTypes.NOT_FOUND);
+            Error error = new Error(TaskItem.ErrorCodes.UPDATE_TASK_NOT_FOUND, $"Task not found for id: {request.Id}", TaskItem.ErrorTypes.NOT_FOUND);
             return Result.Failure(error);
         }
 
         if (request.Status.HasValue)
         {
-            task.ChangeStatus(request.Status.Value, request.Comment);
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(request.Comment))
-            {
-                Error error = new Error(TaskItem.ErrorCodes.UPDATE_COMMENT_REQUIRED, "Comment not provided", TaskItem.ErrorTypes.INVALID_OPERATION);
-                return Result.Failure(error); 
-            }
+            var statusChange = task.ChangeStatus(request.Status.Value, request.Comment);
 
-            task.AddComment(request.Comment);
+            if (statusChange.IsFailure)
+            {
+                return statusChange;
+            }
         }
+
+        if (string.IsNullOrEmpty(request.Comment))
+        {
+            Error error = new Error(TaskItem.ErrorCodes.UPDATE_COMMENT_REQUIRED, "Comment not provided", TaskItem.ErrorTypes.INVALID_OPERATION);
+            return Result.Failure(error);
+        }
+
+        task.AddComment(request.Comment);
+
 
         return Result.Success();
     }

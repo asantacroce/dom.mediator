@@ -1,6 +1,5 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
-using Dom.Mediator.Samples.MinimalApi.Features;
 
 public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
@@ -14,7 +13,7 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 
         if (validation.Count > 0)
         {
-            Error error = new Error(TaskItem.ErrorCodes.CREATE_TASK, "Invalid fields upon creation", TaskItem.ErrorTypes.VALIDATION);
+            Error error = new Error(TaskItem.ErrorCodes.CREATE_TASK, "Missing mandatory fields", TaskItem.ErrorTypes.VALIDATION);
             error.AddDetails(validation);
 
             return Result<string>.Failure(error);
@@ -39,10 +38,10 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
         List<ErrorDetail> errors = new();
 
         if (string.IsNullOrWhiteSpace(request.Title))
-            errors.Add(new ErrorDetail("title", "Title is required."));
+            errors.Add(new ErrorDetail("title", $"{nameof(request.Title).ToLower()} is required."));
 
         if (string.IsNullOrWhiteSpace(request.Description))
-            errors.Add(new ErrorDetail("description", "Description is required."));
+            errors.Add(new ErrorDetail("description", $"{nameof(request.Description).ToLower()} is required."));
 
         return errors;
     }
