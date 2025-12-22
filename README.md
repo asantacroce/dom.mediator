@@ -64,9 +64,9 @@ builder.Services.AddMediator(config =>
 {
     config.RegisterHandlers(typeof(Program).Assembly);
     
-    // Add pipeline behaviors
-    config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
-    config.AddCommandBehaviour(typeof(ValidationBehaviour<>));
+    // Add pipeline behaviors - automatically handles both queries and commands
+    config.AddBehaviour(typeof(LoggingBehaviour<,>));  // For queries (request/response)
+    config.AddBehaviour(typeof(LoggingBehaviour<>));   // For commands (no response)
 });
 ```
 
@@ -101,17 +101,19 @@ dotnet run
 
 ## 🧩 Pipeline Behaviors
 
-Add behaviors to intercept and process requests:
+Add behaviors to intercept and process requests using a unified registration method:
 
 ```csharp
-// For queries (request/response)
-config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
-
-// For commands
-config.AddCommandBehaviour(typeof(ValidationBehaviour<>));
+// Single registration method for both query and command behaviors
+config.AddBehaviour(typeof(LoggingBehaviour<,>));      // For queries (2 generic parameters)
+config.AddBehaviour(typeof(ValidationBehaviour<>));    // For commands (1 generic parameter)
 ```
 
-### Request/Response Behavior Interface:
+The mediator automatically detects whether your behavior is for:
+- **Queries** (request/response) - behaviors with 2 generic type parameters
+- **Commands** (no response) - behaviors with 1 generic type parameter
+
+### Query Behavior Interface (Request/Response):
 ```csharp
 public interface IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
@@ -123,7 +125,7 @@ public interface IPipelineBehavior<TRequest, TResponse>
 }
 ```
 
-### Command Behavior Interface:
+### Command Behavior Interface (No Response):
 ```csharp
 public interface IPipelineBehavior<TCommand>
     where TCommand : ICommand
@@ -132,6 +134,51 @@ public interface IPipelineBehavior<TCommand>
         TCommand command, 
         CancellationToken cancellationToken, 
         CommandHandlerDelegate next);
+}
+```
+
+### Example Behavior Implementation:
+```csharp
+// Query behavior (2 generic parameters)
+public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
+{
+    private readonly ILogger<LoggingBehaviour<TRequest, TResponse>> _logger;
+
+    public LoggingBehaviour(ILogger<LoggingBehaviour<TRequest, TResponse>> logger)
+        => _logger = logger;
+
+    public async Task<Result<TResponse>> Handle(
+        TRequest request,
+        CancellationToken cancellationToken,
+        RequestHandlerDelegate<TResponse> next)
+    {
+        _logger.LogInformation("Handling {RequestType}", typeof(TRequest).Name);
+        var response = await next();
+        _logger.LogInformation("Handled {RequestType}", typeof(TRequest).Name);
+        return response;
+    }
+}
+
+// Command behavior (1 generic parameter)
+public class LoggingBehaviour<TCommand> : IPipelineBehavior<TCommand>
+    where TCommand : ICommand
+{
+    private readonly ILogger<LoggingBehaviour<TCommand>> _logger;
+
+    public LoggingBehaviour(ILogger<LoggingBehaviour<TCommand>> logger)
+        => _logger = logger;
+
+    public async Task<Result> Handle(
+        TCommand command,
+        CancellationToken cancellationToken,
+        CommandHandlerDelegate next)
+    {
+        _logger.LogInformation("Handling {CommandType}", typeof(TCommand).Name);
+        var response = await next();
+        _logger.LogInformation("Handled {CommandType}", typeof(TCommand).Name);
+        return response;
+    }
 }
 ```
 

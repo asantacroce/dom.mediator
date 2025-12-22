@@ -1,47 +1,48 @@
 using Dom.Mediator;
 using Dom.Mediator.Abstractions;
 
-public class CreateTaskHandler : ICommandHandler<CreateTaskCommand>
+public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
-    private readonly TaskStore _store;
+    private readonly TaskRepository _taskRepostiroy;
 
-    public CreateTaskHandler(TaskStore store) => _store = store;
+    public CreateTaskHandler(TaskRepository taskRepository) => _taskRepostiroy = taskRepository;
 
-    public Task<Result> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        if(Validate(request) is Error error)
+        var validation = Validate(request);
+
+        if (validation.Count > 0)
         {
-            return Task.FromResult(Result.Failure(error));
+            Error error = new Error(TaskItem.ErrorCodes.CREATE_TASK, "Missing mandatory fields", TaskItem.ErrorTypes.VALIDATION);
+            error.AddDetails(validation);
+
+            return Result<string>.Failure(error);
         }
 
-        var task = new TaskItem
-        {
-            Id = Guid.NewGuid(),
-            Title = request.Title,
-            Description = request.Description,
-            DueDate = request.DueDate,
-            CreatedAt = DateTime.UtcNow,
-            IsCompleted = false
-        };
+        var createTask = TaskItem.Create(request.Title, request.Description, request.DueDate);
 
-        _store.Tasks.Add(task);
-        return Task.FromResult(Result.Success());
+        if(createTask.IsFailure)
+        {
+            return Result<string>.Failure(createTask.Error!);
+        }
+
+        var task = createTask.Value!;
+
+        _taskRepostiroy.Tasks.Add(task);
+
+        return Result<string>.Success(task.Id);
     }
 
-    public Error Validate(CreateTaskCommand request)
+    public List<ErrorDetail> Validate(CreateTaskCommand request)
     {
-        Error error = new Error("CREATE_001", "Invalid fields upon creation", "validation");
+        List<ErrorDetail> errors = new();
 
         if (string.IsNullOrWhiteSpace(request.Title))
-            error.AddDetail("title", "Title is required.");
+            errors.Add(new ErrorDetail("title", $"{nameof(request.Title).ToLower()} is required."));
 
-        if (request.DueDate.HasValue && request.DueDate.Value < DateTime.UtcNow)
-            error.AddDetail("dueDate", "Due date cannot be in the past.");
+        if (string.IsNullOrWhiteSpace(request.Description))
+            errors.Add(new ErrorDetail("description", $"{nameof(request.Description).ToLower()} is required."));
 
-        if (error.Details.Count > 0)
-            {
-            return error;
-        }
-        return null;
+        return errors;
     }
 }

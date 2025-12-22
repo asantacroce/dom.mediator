@@ -1,11 +1,18 @@
 using Dom.Mediator;
 using Dom.Mediator.Samples.MinimalApi.Infrastructure.Behaviours;
 using Dom.Mediator.Samples.MinimalApi.Infrastructure.Endpoints;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure JSON serialization to support string-based enums
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddMediator(config =>
 {
@@ -13,11 +20,11 @@ builder.Services.AddMediator(config =>
     config.RegisterHandlers(typeof(Program).Assembly);
 
     // Register the request/response behaviours
-    config.AddRequestResponseBehaviour(typeof(LoggingBehaviour<,>));
-    config.AddCommandBehaviour(typeof(LoggingCommandBehaviour<>));
+    config.AddBehaviour(typeof(LoggingBehaviour<,>));  // For queries/requests
+    config.AddBehaviour(typeof(LoggingBehaviour<>));   // For commands
 });
 
-builder.Services.AddSingleton<TaskStore>();
+builder.Services.AddSingleton<TaskRepository>();
 
 var app = builder.Build();
 

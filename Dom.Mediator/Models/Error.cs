@@ -1,7 +1,4 @@
-﻿
-using Dom.Mediator;
-
-public record ErrorDetail(string field, string message);
+﻿public record ErrorDetail(string field, string message);
 
 public class Error
 { 
@@ -21,5 +18,10 @@ public class Error
     public void AddDetail(string errorCode, string errorMessage)
     {
         Details.Add(new ErrorDetail(errorCode, errorMessage));
+    }
+
+    public void AddDetails(List<ErrorDetail> validation)
+    {
+        Details.AddRange(validation);
     }
 }

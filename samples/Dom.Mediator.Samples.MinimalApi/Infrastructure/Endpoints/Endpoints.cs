@@ -18,5 +18,11 @@ public static class Endpoints
             var result = await mediator.Send(new GetAllTasksQuery());
             return result.ToIResult();
         });
+
+        app.MapPut("/tasks", async (UpdateTaskCommand command, IMediator mediator) =>
+        {
+            var result = await mediator.Send(command);
+            return result.ToIResult();
+        });
     }
 }
