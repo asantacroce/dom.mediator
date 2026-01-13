@@ -66,7 +66,7 @@ internal static class LoggingHelper
 /// <summary>
 /// Logging behavior for queries (request/response)
 /// </summary>
-public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehaviour<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly ILogger<LoggingBehaviour<TRequest, TResponse>> _logger;
@@ -98,7 +98,7 @@ public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest,
 /// <summary>
 /// Logging behavior for commands (no response)
 /// </summary>
-public class LoggingBehaviour<TRequest> : IPipelineBehavior<TRequest>
+public class LoggingBehaviour<TRequest> : IPipelineBehaviour<TRequest>
     where TRequest : ICommand
 {
     private readonly ILogger<LoggingBehaviour<TRequest>> _logger;

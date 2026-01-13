@@ -1,13 +1,12 @@
 using Dom.Mediator.Abstractions;
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
 
 namespace Dom.Mediator.Samples.MinimalApi.Infrastructure.Behaviours;
 
 /// <summary>
 /// FluentValidation implementation of the AbstractValidationBehaviour
 /// </summary>
-public class FluentValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class FluentValidationBehaviour<TRequest, TResponse> : IPipelineBehaviour<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
@@ -28,28 +27,30 @@ public class FluentValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<
         
         var validationResults = await Task.WhenAll(
             _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-        
+
         var failures = validationResults
             .SelectMany(r => r.Errors)
-            .Where(f => f != null)
-            .ToList();
-        
-        if (failures.Count == 0)
+            .Where(f => f != null);
+
+        if (failures.Count() > 0)
+        {
+            Error error = new("ValidationError", "One or more validation errors occurred.", "Validation");
+
+            foreach (var failure in failures)
+            {
+                error.AddDetail(failure.PropertyName, $"{failure.ErrorCode}:{failure.ErrorMessage}");
+            }
+
+            return Result<TResponse>.Failure(error);
+        }
+        else
         {
             return await next();
         }
-
-        Error error = new Error("ValidationError", "One or more validation errors occurred.", "Validation");
-        foreach (var failure in failures)
-        {
-            error.AddDetail(failure.ErrorCode, failure.ErrorMessage);
-        }
-
-        return Result<TResponse>.Failure(error);
     }
 }
 
-public class FluentValidationBehaviour<TRequest> : IPipelineBehavior<TRequest>
+public class FluentValidationBehaviour<TRequest> : IPipelineBehaviour<TRequest>
     where TRequest : ICommand
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
@@ -73,20 +74,22 @@ public class FluentValidationBehaviour<TRequest> : IPipelineBehavior<TRequest>
 
         var failures = validationResults
             .SelectMany(r => r.Errors)
-            .Where(f => f != null)
-            .ToList();
+            .Where(f => f != null);
 
-        if (failures.Count == 0)
+        if (failures.Count() > 0)
+        {
+            Error error = new("ValidationError", "One or more validation errors occurred.", "Validation");
+
+            foreach (var failure in failures)
+            {
+                error.AddDetail(failure.PropertyName, $"{failure.ErrorCode}:{failure.ErrorMessage}");
+            }
+
+            return Result.Failure(error);
+        }
+        else
         {
             return await next();
-        }
-
-        Error error = new Error("ValidationError", "One or more validation errors occurred.", "Validation");
-        foreach (var failure in failures)
-        {
-            error.AddDetail(failure.ErrorCode, failure.ErrorMessage);
-        }
-
-        return Result.Failure(error);
+        }   
     }
 }

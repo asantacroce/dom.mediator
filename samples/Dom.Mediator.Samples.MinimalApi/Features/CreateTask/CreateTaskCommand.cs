@@ -11,9 +11,12 @@ public sealed class CreateTaskCommandValidator : AbstractValidator<CreateTaskCom
     public CreateTaskCommandValidator()
     {
         RuleFor(x => x.Title)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage($"{nameof(CreateTaskCommand.Title).ToLower()} is required.");
 
         RuleFor(x => x.Description)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage($"{nameof(CreateTaskCommand.Description).ToLower()} is required.");
+
     }
 }
