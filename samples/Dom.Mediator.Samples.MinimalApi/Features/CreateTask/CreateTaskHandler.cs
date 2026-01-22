@@ -3,9 +3,9 @@ using Dom.Mediator.Abstractions;
 
 public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
-    private readonly TaskRepository _taskRepostiroy;
+    private readonly TaskRepository _taskRepository;
 
-    public CreateTaskHandler(TaskRepository taskRepository) => _taskRepostiroy = taskRepository;
+    public CreateTaskHandler(TaskRepository taskRepository) => _taskRepository = taskRepository;
 
     public async Task<Result<string>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
@@ -18,7 +18,7 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 
         var task = createTask.Value!;
 
-        _taskRepostiroy.Tasks.Add(task);
+        _taskRepository.Tasks.Add(task);
 
         return Result<string>.Success(task.Id);
     }
