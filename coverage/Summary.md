@@ -2,8 +2,8 @@
 
 |||
 |:---|:---|
-| Generated on: | 01/27/2026 - 09:16:53 |
-| Coverage date: | 01/27/2026 - 09:16:51 |
+| Generated on: | 01/27/2026 - 09:23:40 |
+| Coverage date: | 01/27/2026 - 09:23:37 |
 | Parser: | MultiReport (2x Cobertura) |
 | Assemblies: | 1 |
 | Classes: | 7 |
