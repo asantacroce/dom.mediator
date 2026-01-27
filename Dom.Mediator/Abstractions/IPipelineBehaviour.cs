@@ -8,13 +8,13 @@ namespace Dom.Mediator.Abstractions;
 /// the request handler executes.</remarks>
 /// <typeparam name="TRequest">The type of the request being processed. Must implement <see cref="IRequest{TResponse}"/>.</typeparam>
 /// <typeparam name="TResponse">The type of the response returned by the request handler.</typeparam>
-public interface IPipelineBehavior<TRequest, TResponse>
+public interface IPipelineBehaviour<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     Task<Result<TResponse>> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next);
 }
 
-public interface IPipelineBehavior<TRequest>
+public interface IPipelineBehaviour<TRequest>
     where TRequest : ICommand
 {
     Task<Result> Handle(TRequest request, CancellationToken cancellationToken, CommandHandlerDelegate next);

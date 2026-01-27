@@ -3,22 +3,12 @@ using Dom.Mediator.Abstractions;
 
 public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 {
-    private readonly TaskRepository _taskRepostiroy;
+    private readonly TaskRepository _taskRepository;
 
-    public CreateTaskHandler(TaskRepository taskRepository) => _taskRepostiroy = taskRepository;
+    public CreateTaskHandler(TaskRepository taskRepository) => _taskRepository = taskRepository;
 
     public async Task<Result<string>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        var validation = Validate(request);
-
-        if (validation.Count > 0)
-        {
-            Error error = new Error(TaskItem.ErrorCodes.CREATE_TASK, "Missing mandatory fields", TaskItem.ErrorTypes.VALIDATION);
-            error.AddDetails(validation);
-
-            return Result<string>.Failure(error);
-        }
-
         var createTask = TaskItem.Create(request.Title, request.Description, request.DueDate);
 
         if(createTask.IsFailure)
@@ -28,21 +18,8 @@ public class CreateTaskHandler : ICommandHandler<CreateTaskCommand, string>
 
         var task = createTask.Value!;
 
-        _taskRepostiroy.Tasks.Add(task);
+        _taskRepository.Tasks.Add(task);
 
         return Result<string>.Success(task.Id);
-    }
-
-    public List<ErrorDetail> Validate(CreateTaskCommand request)
-    {
-        List<ErrorDetail> errors = new();
-
-        if (string.IsNullOrWhiteSpace(request.Title))
-            errors.Add(new ErrorDetail("title", $"{nameof(request.Title).ToLower()} is required."));
-
-        if (string.IsNullOrWhiteSpace(request.Description))
-            errors.Add(new ErrorDetail("description", $"{nameof(request.Description).ToLower()} is required."));
-
-        return errors;
     }
 }

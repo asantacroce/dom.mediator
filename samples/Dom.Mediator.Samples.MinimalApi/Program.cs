@@ -14,6 +14,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddValidatorsFromAssembly(typeof(CreateTaskCommand).Assembly);
+
 builder.Services.AddMediator(config =>
 {
     //Register command/query handlers
@@ -22,6 +24,9 @@ builder.Services.AddMediator(config =>
     // Register the request/response behaviours
     config.AddBehaviour(typeof(LoggingBehaviour<,>));  // For queries/requests
     config.AddBehaviour(typeof(LoggingBehaviour<>));   // For commands
+
+    config.AddBehaviour(typeof(FluentValidationBehaviour<,>));
+    config.AddBehaviour(typeof(FluentValidationBehaviour<>));
 });
 
 builder.Services.AddSingleton<TaskRepository>();

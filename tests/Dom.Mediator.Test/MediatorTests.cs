@@ -188,7 +188,7 @@ namespace Dom.Mediator.Test
     }
     
     // Test Behavior for tracking execution order
-    public class TestBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class TestBehavior<TRequest, TResponse> : IPipelineBehaviour<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
         private readonly string _name;
